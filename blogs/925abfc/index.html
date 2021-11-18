@@ -1,0 +1,335 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#5698c3"><meta name="author" content="语轻星子"><meta name="copyright" content="语轻星子"><meta name="generator" content="Hexo 5.4.0"><meta name="theme" content="hexo-theme-yun"><title>函数式编程(二) | 轻语馆</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.25/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_dxory92pb0h.js" async></script><link id="light-prism-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@latest/themes/prism.css" media="(prefers-color-scheme: light)"><link id="dark-prism-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@latest/themes/prism-tomorrow.css" media="(prefers-color-scheme: dark)"><link rel="icon" href="/yun.svg"><link rel="mask-icon" href="/yun.svg" color="#5698c3"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"hostname":"xxcijmz.top","root":"/","title":"轻语馆","version":"1.6.2","mode":"time","copycode":true,"page":{"isPost":true},"i18n":{"placeholder":"搜索...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）"},"anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"/data/sentences.json"},"algolia":{"appID":"I6Q6TFSWKC","apiKey":"8299a265813c86a465cc32755761abc9","indexName":"blogs","hits":{"per_page":10}}};
+  </script><link rel="stylesheet" href="/css/hexo-theme-yun.css"><script src="/js/utils.js"></script><script src="/js/hexo-theme-yun.js"></script><link rel="stylesheet" href="/css/content.css"><meta name="description" content="纯函数 纯函数：相同的输入永远会得到相同的输出(需要有参数和返回值)，而且没有任何可观察的副作用 纯函数就类似数学中的函数(用来描述输入和输出之间的关系)，y &#x3D; f(x)      lodash 是一个纯函数的功能库，提供了对数组、数字、对象、字符串、函数等操作的一些方法 数组的 slice 和 splice 分别是：纯函数和不纯的函数 slice 返回数组中的指定部分，不会改变原数组  spl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="函数式编程(二)">
+<meta property="og:url" content="https://xxcijmz.top/blogs/925abfc/index.html">
+<meta property="og:site_name" content="轻语馆">
+<meta property="og:description" content="纯函数 纯函数：相同的输入永远会得到相同的输出(需要有参数和返回值)，而且没有任何可观察的副作用 纯函数就类似数学中的函数(用来描述输入和输出之间的关系)，y &#x3D; f(x)      lodash 是一个纯函数的功能库，提供了对数组、数字、对象、字符串、函数等操作的一些方法 数组的 slice 和 splice 分别是：纯函数和不纯的函数 slice 返回数组中的指定部分，不会改变原数组  spl">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xxcijmz.top/blogs/925abfc/1.png">
+<meta property="article:published_time" content="2021-09-29T07:16:04.000Z">
+<meta property="article:modified_time" content="2021-10-02T11:01:33.803Z">
+<meta property="article:author" content="语轻星子">
+<meta property="article:tag" content="JS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://xxcijmz.top/blogs/925abfc/1.png"><script src="/js/ui/mode.js"></script></head><body><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="语轻星子"><img width="96" loading="lazy" src="https://cdn.jsdelivr.net/gh/xxc-yqxz/xxc-yqxz.github.io/images/avatar.jpg" alt="语轻星子"></a><div class="site-author-name"><a href="/about/">语轻星子</a></div><span class="site-name">轻语馆</span><sub class="site-subtitle">我也会加油，所以你也要加油，这是约定</sub><div class="site-desciption"></div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">33</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">9</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">11</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://github.com/xxc-yqxz/xxc-yqxz.github.io" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://wpa.qq.com/msgrd?v=3&amp;uin=894043590&amp;site=qq&amp;menu=yes" title="QQ" target="_blank" style="color:#12B7F5"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-qq-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://music.163.com/#/user/home?id=1379764422" title="网易云音乐" target="_blank" style="color:#C10D0C"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-netease-cloud-music-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://space.bilibili.com/269921139" title="哔哩哔哩" target="_blank" style="color:#FF8EB3"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-bilibili-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%AF%E5%87%BD%E6%95%B0"><span class="toc-number">1.</span> <span class="toc-text">纯函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lodash"><span class="toc-number">2.</span> <span class="toc-text">Lodash</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%AF%E5%87%BD%E6%95%B0%E7%9A%84%E5%A5%BD%E5%A4%84"><span class="toc-number">3.</span> <span class="toc-text">纯函数的好处</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%AF%E4%BD%9C%E7%94%A8%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">4.</span> <span class="toc-text">副作用的概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%AF%E9%87%8C%E5%8C%96"><span class="toc-number">5.</span> <span class="toc-text">柯里化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lodash%E4%B8%AD%E7%9A%84%E6%9F%AF%E9%87%8C%E5%8C%96"><span class="toc-number">6.</span> <span class="toc-text">Lodash中的柯里化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%AF%E9%87%8C%E5%8C%96%E6%A1%88%E4%BE%8B"><span class="toc-number">7.</span> <span class="toc-text">柯里化案例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%AF%E9%87%8C%E5%8C%96%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">8.</span> <span class="toc-text">柯里化实现原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%AF%E9%87%8C%E5%8C%96%E6%80%BB%E7%BB%93"><span class="toc-number">9.</span> <span class="toc-text">柯里化总结</span></a></li></ol></div></div></div><div class="tag-cloud"><div class="tag-cloud-tags"><a href="/tags/JS/" style="font-size: 30px; color: #8abcd1">JS</a> <a href="/tags/Vue/" style="font-size: 25.5px; color: #8cbad1">Vue</a> <a href="/tags/eggjs/" style="font-size: 16.5px; color: #91b7d0">eggjs</a> <a href="/tags/serverless/" style="font-size: 16.5px; color: #91b7d0">serverless</a> <a href="/tags/uniapp/" style="font-size: 21px; color: #8fb9d0">uniapp</a> <a href="/tags/vue/" style="font-size: 21px; color: #8fb9d0">vue</a> <a href="/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 16.5px; color: #91b7d0">小程序</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 16.5px; color: #91b7d0">工程化</a> <a href="/tags/%E6%97%A5%E8%AE%B0/" style="font-size: 12px; color: #93b5cf">日记</a> <a href="/tags/%E6%A6%82%E5%BF%B5/" style="font-size: 21px; color: #8fb9d0">概念</a> <a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 12px; color: #93b5cf">部署</a></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://xxcijmz.top/blogs/925abfc/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="语轻星子"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="轻语馆"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">函数式编程(二)</h1><div class="post-meta"><div class="post-time" style="display:block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2021-09-29 15:16:04" itemprop="dateCreated datePublished" datetime="2021-09-29T15:16:04+08:00">2021-09-29</time><span class="post-meta-divider">-</span><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-2-line"></use></svg></span> <time title="修改时间：2021-10-02 19:01:33" itemprop="dateModified" datetime="2021-10-02T19:01:33+08:00">2021-10-02</time></div><span class="post-count"><span class="post-symbolcount"><span class="post-meta-item-icon" title="本文字数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-file-word-line"></use></svg></span> <span title="本文字数">1.9k</span><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读时长"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-timer-line"></use></svg></span> <span title="阅读时长">7m</span></span></span><div class="post-classify"><span class="post-category"> <span class="post-meta-item-icon" style="margin-right:3px;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span><span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/%E5%A4%A7%E5%89%8D%E7%AB%AF/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">大前端</span></a></span> > <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/%E5%A4%A7%E5%89%8D%E7%AB%AF/JS/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">JS</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag-item" href="/tags/JS/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">JS</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#5698c3;"><h2 id="纯函数"><a href="#纯函数" class="headerlink" title="纯函数"></a>纯函数</h2><ul>
+<li>纯函数：<strong>相同的输入永远会得到相同的输出</strong>(需要有参数和返回值)，而且没有任何可观察的副作用<ul>
+<li>纯函数就类似数学中的函数(用来描述输入和输出之间的关系)，y = f(x)</li>
+</ul>
+</li>
+</ul>
+<p><img src="/blogs/925abfc/1.png" loading="lazy"></p>
+<ul>
+<li>lodash 是一个纯函数的功能库，提供了对数组、数字、对象、字符串、函数等操作的一些方法</li>
+<li>数组的 slice 和 splice 分别是：纯函数和不纯的函数<ul>
+<li>slice 返回数组中的指定部分，不会改变原数组 </li>
+<li>splice 对数组进行操作返回该数组，会改变原数组</li>
+</ul>
+</li>
+</ul>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// 纯函数和不纯的函数</span>
+<span class="token comment">// slice / splice</span>
+
+<span class="token keyword">let</span> array <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">]</span>
+
+<span class="token comment">// 纯函数</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>array<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment">// [ 1, 2, 3 ]</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>array<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment">// [ 1, 2, 3 ]</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>array<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment">// [ 1, 2, 3 ]</span>
+
+<span class="token comment">// 不纯的函数</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>array<span class="token punctuation">.</span><span class="token function">splice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">// [ 1, 2, 3 ]</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>array<span class="token punctuation">.</span><span class="token function">splice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">// [ 4, 5 ]</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>array<span class="token punctuation">.</span><span class="token function">splice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">// []</span>
+
+<span class="token comment">// 纯函数</span>
+<span class="token keyword">function</span> <span class="token function">getSum</span><span class="token punctuation">(</span><span class="token parameter">n1<span class="token punctuation">,</span> n2</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> n1 <span class="token operator">+</span> n2
+<span class="token punctuation">&#125;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">getSum</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>   <span class="token comment">// 3</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">getSum</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>   <span class="token comment">// 3</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">getSum</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>   <span class="token comment">// 3</span></code></pre>
+
+<ul>
+<li>函数式编程不会保留计算中间的结果，所以变量是不可变的(无状态的)</li>
+<li>我们可以把一个函数的执行结果交给另一个函数去处理</li>
+</ul>
+<h2 id="Lodash"><a href="#Lodash" class="headerlink" title="Lodash"></a>Lodash</h2><ul>
+<li>Lodash 是一个一致性、模块化、高性能的 JavaScript 实用工具库。</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://www.lodashjs.com/">Lodash官网</a></p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// 演示 lodash</span>
+<span class="token comment">// first / last / toUpper / reverse / each / includes / find / findIndex</span>
+<span class="token keyword">const</span> _ <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'lodash'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> array <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'jack'</span><span class="token punctuation">,</span> <span class="token string">'tom'</span><span class="token punctuation">,</span> <span class="token string">'lucy'</span><span class="token punctuation">,</span> <span class="token string">'kate'</span><span class="token punctuation">]</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>_<span class="token punctuation">.</span><span class="token function">first</span><span class="token punctuation">(</span>array<span class="token punctuation">)</span><span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>_<span class="token punctuation">.</span><span class="token function">last</span><span class="token punctuation">(</span>array<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>_<span class="token punctuation">.</span><span class="token function">toUpper</span><span class="token punctuation">(</span>_<span class="token punctuation">.</span><span class="token function">first</span><span class="token punctuation">(</span>array<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>_<span class="token punctuation">.</span><span class="token function">reverse</span><span class="token punctuation">(</span>array<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> r <span class="token operator">=</span> _<span class="token punctuation">.</span><span class="token function">each</span><span class="token punctuation">(</span>array<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">item<span class="token punctuation">,</span> index</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>item<span class="token punctuation">,</span> index<span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>r<span class="token punctuation">)</span></code></pre>
+
+<h2 id="纯函数的好处"><a href="#纯函数的好处" class="headerlink" title="纯函数的好处"></a>纯函数的好处</h2><ul>
+<li><p>可缓存</p>
+<ul>
+<li><p>因为纯函数对相同的输入始终有相同的结果，所以可以把纯函数的结果缓存起来（避免要多次执行同一个函数得到其返回值，而影响性能）</p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// 记忆函数</span>
+<span class="token keyword">const</span> _ <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'lodash'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">function</span> <span class="token function">getArea</span><span class="token punctuation">(</span><span class="token parameter">r</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>r<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> Math<span class="token punctuation">.</span><span class="token constant">PI</span> <span class="token operator">*</span> r <span class="token operator">*</span> r
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">let</span> getAreaWithMemory <span class="token operator">=</span> _<span class="token punctuation">.</span><span class="token function">memoize</span><span class="token punctuation">(</span>getArea<span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">getAreaWithMemory</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">)</span>   <span class="token comment">// 只有第一次次调用getAreaWithMemory时会输出r，下面的两次都是直接输出缓存数据，而不会在调用getArea</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">getAreaWithMemory</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">getAreaWithMemory</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre></li>
+<li><p>自己模拟一个memoize函数</p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">getArea</span><span class="token punctuation">(</span><span class="token parameter">r</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>r<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> Math<span class="token punctuation">.</span><span class="token constant">PI</span> <span class="token operator">*</span> r <span class="token operator">*</span> r
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 模拟 memoize 方法的实现，参数要求是纯函数</span>
+<span class="token keyword">function</span> <span class="token function">memoize</span><span class="token punctuation">(</span><span class="token parameter">f</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">let</span> cache <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">let</span> key <span class="token operator">=</span> <span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span>arguments<span class="token punctuation">)</span>
+        <span class="token comment">// 先判断缓存中是否有值，若有则赋值，若没有则执行f，并将返回值缓存</span>
+        cache<span class="token punctuation">[</span>key<span class="token punctuation">]</span> <span class="token operator">=</span> cache<span class="token punctuation">[</span>key<span class="token punctuation">]</span> <span class="token operator">||</span> <span class="token function">f</span><span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span>f<span class="token punctuation">,</span> arguments<span class="token punctuation">)</span>
+        <span class="token keyword">return</span> cache<span class="token punctuation">[</span>key<span class="token punctuation">]</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 此处说明闭包使得函数内部的变量会一直存在于内存中，并不会立即释放，除非将引用改为null（getAreaWithMemory=null）。</span>
+<span class="token keyword">let</span> getAreaWithMemory <span class="token operator">=</span> <span class="token function">memoize</span><span class="token punctuation">(</span>getArea<span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">getAreaWithMemory</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">)</span>   <span class="token comment">// 只有第一次次调用getAreaWithMemory时会输出r，下面的两次都是直接输出缓存数据，而不会在调用getArea</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">getAreaWithMemory</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">getAreaWithMemory</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre></li>
+</ul>
+</li>
+<li><p>可测试</p>
+<ul>
+<li>纯函数让测试更方便(因为其肯定有输入输出)</li>
+</ul>
+</li>
+<li><p>并行处理</p>
+<ul>
+<li>在多线程环境下并行操作共享的内存数据很可能会出现意外情况</li>
+<li>纯函数不需要访问共享的内存数据，所以在并行环境下可以任意运行纯函数(ES6后有了Web Worker可开启多线程)</li>
+</ul>
+</li>
+</ul>
+<h2 id="副作用的概念"><a href="#副作用的概念" class="headerlink" title="副作用的概念"></a>副作用的概念</h2><ul>
+<li>纯函数：对于相同的输入永远会得到相同的输出，没有任何可观察的<strong>副作用</strong></li>
+</ul>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// 不纯的（当mini改变时，checkAge的返回值也会改变）</span>
+<span class="token keyword">let</span> mini <span class="token operator">=</span> <span class="token number">18</span>
+<span class="token keyword">function</span> <span class="token function">checkAge</span> <span class="token punctuation">(</span><span class="token parameter">age</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+	<span class="token keyword">return</span> age <span class="token operator">>=</span> mini
+<span class="token punctuation">&#125;</span>
+<span class="token comment">// 纯的(有硬编码，后续可以通过柯里化解决)</span>
+<span class="token keyword">function</span> <span class="token function">checkAge</span> <span class="token punctuation">(</span><span class="token parameter">age</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+	<span class="token keyword">let</span> mini <span class="token operator">=</span> <span class="token number">18</span>
+	<span class="token keyword">return</span> age <span class="token operator">>=</span> mini
+<span class="token punctuation">&#125;</span></code></pre>
+
+<blockquote>
+<p>硬编码：将数据直接嵌入到程序或其他可执行对象的源代码中的软件开发实践，与从外部获取数据或在运行时生成数据不同。 </p>
+</blockquote>
+<p>&emsp;&emsp;副作用让一个函数变的不纯(如上例)，纯函数的根据相同的输入返回相同的输出，如果函数依赖于外部 的状态就无法保证输出相同，就会带来副作用。</p>
+<p>副作用来源：</p>
+<ul>
+<li>配置文件</li>
+<li>数据库</li>
+<li>获取用户的输入</li>
+<li>…..</li>
+</ul>
+<p>&emsp;&emsp;所有的外部交互都有可能带来副作用，副作用也使得方法通用性下降不适合扩展和可重用性，同时副作用会给程序中带来安全隐患给程序带来不确定性，但是副作用不可能完全禁止，尽可能控制它们在可控范围内发生。</p>
+<h2 id="柯里化"><a href="#柯里化" class="headerlink" title="柯里化"></a>柯里化</h2><ul>
+<li><p>当一个函数有多个参数的时候先传递一部分参数调用它（这部分参数以后永远不变）</p>
+</li>
+<li><p>然后返回一个新的函数接收剩余的参数，返回结果</p>
+</li>
+<li><p>使用柯里化解决硬编码问题</p>
+</li>
+</ul>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// 柯里化演示</span>
+<span class="token comment">// function checkAge(age) &#123;</span>
+<span class="token comment">//     let min = 18</span>
+<span class="token comment">//     return age >= min</span>
+<span class="token comment">// &#125;</span>
+
+<span class="token comment">// 普通的纯函数，没有硬编码问题</span>
+<span class="token keyword">function</span> <span class="token function">checkAge</span><span class="token punctuation">(</span><span class="token parameter">min<span class="token punctuation">,</span> age</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> age <span class="token operator">>=</span> min
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// console.log(checkAge(18, 20))</span>
+<span class="token comment">// console.log(checkAge(18, 24))</span>
+<span class="token comment">// console.log(checkAge(22, 24))</span>
+
+<span class="token comment">// 函数的柯里化</span>
+<span class="token comment">// function checkAge(min) &#123;</span>
+<span class="token comment">//     return function (age) &#123;</span>
+<span class="token comment">//         return age >= min</span>
+<span class="token comment">//     &#125;</span>
+<span class="token comment">// &#125;</span>
+
+<span class="token comment">// ES6箭头函数</span>
+<span class="token keyword">let</span> <span class="token function-variable function">checkAge</span> <span class="token operator">=</span> <span class="token parameter">min</span> <span class="token operator">=></span> <span class="token punctuation">(</span><span class="token parameter">age</span> <span class="token operator">=></span> age <span class="token operator">>=</span> min<span class="token punctuation">)</span>
+
+<span class="token keyword">let</span> checkAge18 <span class="token operator">=</span> <span class="token function">checkAge</span><span class="token punctuation">(</span><span class="token number">18</span><span class="token punctuation">)</span>
+<span class="token keyword">let</span> checkAge20 <span class="token operator">=</span> <span class="token function">checkAge</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">checkAge18</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">checkAge18</span><span class="token punctuation">(</span><span class="token number">24</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+
+
+
+<h2 id="Lodash中的柯里化"><a href="#Lodash中的柯里化" class="headerlink" title="Lodash中的柯里化"></a>Lodash中的柯里化</h2><ul>
+<li><p>_.curry(func)</p>
+<ul>
+<li>功能：创建一个函数，该函数接收一个或多个 func 的参数，如果 func 所需要的参数都被提 供则执行 func 并返回执行的结果。否则继续返回该函数并等待接收剩余的参数。</li>
+<li>参数：需要柯里化的函数</li>
+<li>返回值：柯里化后的函数</li>
+</ul>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// lodash 中的 curry基本使用</span>
+<span class="token keyword">const</span> _ <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'lodash'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">function</span> <span class="token function">getSum</span><span class="token punctuation">(</span><span class="token parameter">a<span class="token punctuation">,</span> b<span class="token punctuation">,</span> c</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> a <span class="token operator">+</span> b <span class="token operator">+</span> c
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">const</span> curried <span class="token operator">=</span> _<span class="token punctuation">.</span><span class="token function">curry</span><span class="token punctuation">(</span>getSum<span class="token punctuation">)</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">curried</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span>	<span class="token comment">// 6</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">curried</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span>	<span class="token comment">// 6</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">curried</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span>	<span class="token comment">// 6</span></code></pre></li>
+</ul>
+<h2 id="柯里化案例"><a href="#柯里化案例" class="headerlink" title="柯里化案例"></a>柯里化案例</h2><pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// 柯里化案例</span>
+<span class="token comment">// ''.match(/\s+/g)     // 全局匹配所有空格</span>
+<span class="token comment">// ''.match(/\d+/g)     // 全局匹配所有数字</span>
+
+<span class="token keyword">const</span> _ <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'lodash'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> match <span class="token operator">=</span> _<span class="token punctuation">.</span><span class="token function">curry</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">reg<span class="token punctuation">,</span> str</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> str<span class="token punctuation">.</span><span class="token function">match</span><span class="token punctuation">(</span>reg<span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> haveSpace <span class="token operator">=</span> <span class="token function">match</span><span class="token punctuation">(</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">\s+</span><span class="token regex-delimiter">/</span><span class="token regex-flags">g</span></span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> haveNumber <span class="token operator">=</span> <span class="token function">match</span><span class="token punctuation">(</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">\d+</span><span class="token regex-delimiter">/</span><span class="token regex-flags">g</span></span><span class="token punctuation">)</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">haveSpace</span><span class="token punctuation">(</span><span class="token string">'hello world'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>   <span class="token comment">// [' ']</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">haveSpace</span><span class="token punctuation">(</span><span class="token string">'helloworld'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>   <span class="token comment">// null</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">haveNumber</span><span class="token punctuation">(</span><span class="token string">'123abc'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>   <span class="token comment">// ['123']</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">haveNumber</span><span class="token punctuation">(</span><span class="token string">'abc'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>   <span class="token comment">// null</span>
+
+<span class="token keyword">const</span> filter <span class="token operator">=</span> _<span class="token punctuation">.</span><span class="token function">curry</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">func<span class="token punctuation">,</span> array</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> array<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>func<span class="token punctuation">)</span>	<span class="token comment">// 此处比较难以理解，等价于：Array.filter(function(str)&#123;return str.match(reg)&#125;)</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">filter</span><span class="token punctuation">(</span>haveSpace<span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'JoinCCC'</span><span class="token punctuation">,</span> <span class="token string">'Join XXX'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> findSpace <span class="token operator">=</span> <span class="token function">filter</span><span class="token punctuation">(</span>haveSpace<span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">findSpace</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'JoinCCC'</span><span class="token punctuation">,</span> <span class="token string">'Join XXX'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+
+<h2 id="柯里化实现原理"><a href="#柯里化实现原理" class="headerlink" title="柯里化实现原理"></a>柯里化实现原理</h2><div class="success">
+
+<blockquote>
+<p>此处curry函数的定义请好好参透</p>
+</blockquote>
+</div>
+
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// 模拟实现 lodash 中的 curry 方法</span>
+
+<span class="token keyword">function</span> <span class="token function">getSum</span><span class="token punctuation">(</span><span class="token parameter">a<span class="token punctuation">,</span> b<span class="token punctuation">,</span> c</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> a <span class="token operator">+</span> b <span class="token operator">+</span> c
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">const</span> curried <span class="token operator">=</span> <span class="token function">curry</span><span class="token punctuation">(</span>getSum<span class="token punctuation">)</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">curried</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">curried</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">curried</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment">// 可以通过函数名.length来获取函数的参数个数</span>
+<span class="token comment">// console.log(getSum.length)      // 3</span>
+
+<span class="token keyword">function</span> <span class="token function">curry</span><span class="token punctuation">(</span><span class="token parameter">func</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token function">curriedFn</span><span class="token punctuation">(</span><span class="token parameter"><span class="token operator">...</span>args</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token comment">// 此处使用ES6剩余参数语法</span>
+        <span class="token comment">// 判断实参和形参的个数</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>args<span class="token punctuation">.</span>length <span class="token operator">&lt;</span> func<span class="token punctuation">.</span>length<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token comment">// 此处使用Array.from将伪数组转为数组，再使用concat将两个数组连接，最后使用...来将数组解构</span>
+                <span class="token keyword">return</span> <span class="token function">curriedFn</span><span class="token punctuation">(</span><span class="token operator">...</span>args<span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span>Array<span class="token punctuation">.</span><span class="token function">from</span><span class="token punctuation">(</span>arguments<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">return</span> <span class="token function">func</span><span class="token punctuation">(</span><span class="token operator">...</span>args<span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code></pre>
+
+
+
+<h2 id="柯里化总结"><a href="#柯里化总结" class="headerlink" title="柯里化总结"></a>柯里化总结</h2><ul>
+<li>柯里化可以让我们给一个函数传递较少的参数得到一个已经记住了某些固定参数的新函数 </li>
+<li>这是一种对函数参数的’缓存’ </li>
+<li>让函数变的更灵活，让函数的粒度更小 </li>
+<li>可以把多元函数转换成一元函数，可以组合使用函数产生强大的功能</li>
+</ul>
+</div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>语轻星子</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://xxcijmz.top/blogs/925abfc/" title="函数式编程(二)">https://xxcijmz.top/blogs/925abfc/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/blogs/77d68bd7/" rel="prev" title="函数式编程(三)"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-left-s-line"></use></svg><span class="post-nav-text">函数式编程(三)</span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/blogs/1690d21b/" rel="next" title="函数式编程"><span class="post-nav-text">函数式编程</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div class="hty-card" id="comment"><div class="comment-tooltip text-center"><span>要不要和我说些什么？</span><br></div><div id="valine-container"></div><script>Yun.utils.getScript("https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js", () => {
+  const valineConfig = {"enable":true,"appId":"MnqOxUn1tp2XfaBiRJqcPNC3-MdYXbMMI","appKey":"BUJAYYUt5IhdIDVVvHH8aHMx","placeholder":"来与我一起讨论吧","avatar":null,"pageSize":10,"visitor":false,"highlight":true,"recordIP":false,"enableQQ":true,"meta":["nick"],"el":"#valine-container","lang":"zh-cn"}
+  valineConfig.path = "/blogs/925abfc/"
+  new Valine(valineConfig)
+}, window.Valine);</script></div></main><footer class="sidebar-translate" id="footer"><div class="beian"><a rel="noopener" href="https://beian.miit.gov.cn/" target="_blank">闽ICP备2021017107号</a></div><div class="copyright"><span>&copy; 2021 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> 语轻星子</span></div><div class="live_time"><span>本博客已运行：</span><span id="display_live_time"></span><script>function blog_live_time() {
+  setTimeout(blog_live_time, 1000);
+  const start = new Date('2021-09-23T00:03:00');
+  const now = new Date();
+  const timeDiff = (now.getTime() - start.getTime());
+  const msPerMinute = 60 * 1000;
+  const msPerHour = 60 * msPerMinute;
+  const msPerDay = 24 * msPerHour;
+  const passDay = Math.floor(timeDiff / msPerDay);
+  const passHour = Math.floor((timeDiff % msPerDay) / 60 / 60 / 1000);
+  const passMinute = Math.floor((timeDiff % msPerHour) / 60 / 1000);
+  const passSecond = Math.floor((timeDiff % msPerMinute) / 1000);
+  display_live_time.innerHTML = " " + passDay + " 天 " + passHour + " 小时 " + passMinute + " 分 " + passSecond + " 秒";
+}
+blog_live_time();
+</script></div></footer><a class="hty-icon-button" id="back-to-top" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#5698c3" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script defer src="https://cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script><script defer src="https://cdn.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"></script><script defer src="/js/search/algolia-search.js"></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-close-line"></use></svg></span></div><div class="search-input-container"></div><div class="algolia-results"><div id="algolia-stats"></div><div id="algolia-hits"></div><div class="algolia-pagination" id="algolia-pagination"></div></div></div></div><script src="https://cdn.jsdelivr.net/npm/live2d-widget@^3.1.3/lib/L2Dwidget.min.js"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.9},"dialog":{"enable":true},"log":false});</script></body></html>

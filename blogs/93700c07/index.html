@@ -1,0 +1,1077 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#5698c3"><meta name="author" content="语轻星子"><meta name="copyright" content="语轻星子"><meta name="generator" content="Hexo 5.4.0"><meta name="theme" content="hexo-theme-yun"><title>自动化构建 | 轻语馆</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.25/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_dxory92pb0h.js" async></script><link id="light-prism-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@latest/themes/prism.css" media="(prefers-color-scheme: light)"><link id="dark-prism-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@latest/themes/prism-tomorrow.css" media="(prefers-color-scheme: dark)"><link rel="icon" href="/yun.svg"><link rel="mask-icon" href="/yun.svg" color="#5698c3"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"hostname":"xxcijmz.top","root":"/","title":"轻语馆","version":"1.6.2","mode":"time","copycode":true,"page":{"isPost":true},"i18n":{"placeholder":"搜索...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）"},"anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"/data/sentences.json"},"algolia":{"appID":"I6Q6TFSWKC","apiKey":"8299a265813c86a465cc32755761abc9","indexName":"blogs","hits":{"per_page":10}}};
+  </script><link rel="stylesheet" href="/css/hexo-theme-yun.css"><script src="/js/utils.js"></script><script src="/js/hexo-theme-yun.js"></script><link rel="stylesheet" href="/css/content.css"><meta name="description" content="自动化构建 一切重复工作本应自动化。 源代码  &#x3D;&#x3D;自动化构建&#x3D;&#x3D;&gt; 生产代码   （自动化构建工作流） 作用：尽可能脱离运行环境兼容带来的问题，使得在开发阶段能够使用提高效率的语法、规范和标准，构建转换那些不被支持的【特性】  使用NPM Script首先我们来使用scss工具来将scss文件转换为css文件  新建scss文件  $body-bg:#f8f9fb; $body-color">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自动化构建">
+<meta property="og:url" content="https://xxcijmz.top/blogs/93700c07/index.html">
+<meta property="og:site_name" content="轻语馆">
+<meta property="og:description" content="自动化构建 一切重复工作本应自动化。 源代码  &#x3D;&#x3D;自动化构建&#x3D;&#x3D;&gt; 生产代码   （自动化构建工作流） 作用：尽可能脱离运行环境兼容带来的问题，使得在开发阶段能够使用提高效率的语法、规范和标准，构建转换那些不被支持的【特性】  使用NPM Script首先我们来使用scss工具来将scss文件转换为css文件  新建scss文件  $body-bg:#f8f9fb; $body-color">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/1.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/2.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/3.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/4.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/5.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/6.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/7.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/8.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/9.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/10.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/11.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/12.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/13.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/14.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/15.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/16.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/17.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/18.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/19.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/20.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/21.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/22.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/23.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/24.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/25.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/26.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/27.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/28.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/30.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/29.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/31.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/32.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/33.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/34.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/35.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/36.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/37.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/38.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/39.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/40.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/41.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/42.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/43.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/93700c07/44.jpg">
+<meta property="article:published_time" content="2021-10-10T05:22:38.000Z">
+<meta property="article:modified_time" content="2021-10-14T14:11:48.818Z">
+<meta property="article:author" content="语轻星子">
+<meta property="article:tag" content="工程化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://xxcijmz.top/blogs/93700c07/1.jpg"><script src="/js/ui/mode.js"></script></head><body><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="语轻星子"><img width="96" loading="lazy" src="https://cdn.jsdelivr.net/gh/xxc-yqxz/xxc-yqxz.github.io/images/avatar.jpg" alt="语轻星子"></a><div class="site-author-name"><a href="/about/">语轻星子</a></div><span class="site-name">轻语馆</span><sub class="site-subtitle">我也会加油，所以你也要加油，这是约定</sub><div class="site-desciption"></div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">33</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">9</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">11</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://github.com/xxc-yqxz/xxc-yqxz.github.io" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://wpa.qq.com/msgrd?v=3&amp;uin=894043590&amp;site=qq&amp;menu=yes" title="QQ" target="_blank" style="color:#12B7F5"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-qq-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://music.163.com/#/user/home?id=1379764422" title="网易云音乐" target="_blank" style="color:#C10D0C"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-netease-cloud-music-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://space.bilibili.com/269921139" title="哔哩哔哩" target="_blank" style="color:#FF8EB3"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-bilibili-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9E%84%E5%BB%BA"><span class="toc-number">1.</span> <span class="toc-text">自动化构建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8NPM-Script"><span class="toc-number">1.1.</span> <span class="toc-text">使用NPM Script</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9E%84%E5%BB%BA%E5%B7%A5%E5%85%B7"><span class="toc-number">1.2.</span> <span class="toc-text">常用的自动化构建工具</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Grunt"><span class="toc-number">2.</span> <span class="toc-text">Grunt</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-number">2.1.</span> <span class="toc-text">使用步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%87%E8%AE%B0%E4%BB%BB%E5%8A%A1%E5%A4%B1%E8%B4%A5"><span class="toc-number">2.2.</span> <span class="toc-text">标记任务失败</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E9%80%89%E9%A1%B9%E6%96%B9%E6%B3%95"><span class="toc-number">2.3.</span> <span class="toc-text">配置选项方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E7%9B%AE%E6%A0%87%E4%BB%BB%E5%8A%A1"><span class="toc-number">2.4.</span> <span class="toc-text">多目标任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%92%E4%BB%B6%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">2.5.</span> <span class="toc-text">插件的使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%8F%92%E4%BB%B6%E5%8F%8A%E6%80%BB%E7%BB%93"><span class="toc-number">2.6.</span> <span class="toc-text">常用插件及总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gulp"><span class="toc-number">3.</span> <span class="toc-text">Gulp</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-number">3.1.</span> <span class="toc-text">基本使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%BB%84%E5%90%88%E4%BB%BB%E5%8A%A1"><span class="toc-number">3.2.</span> <span class="toc-text">创建组合任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="toc-number">3.3.</span> <span class="toc-text">异步任务的三种方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA%E8%BF%87%E7%A8%8B%E6%A0%B8%E5%BF%83%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-number">3.4.</span> <span class="toc-text">构建过程核心工作原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C-API"><span class="toc-number">3.5.</span> <span class="toc-text">文件操作 API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Gulp-%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9E%84%E5%BB%BA%E6%A1%88%E4%BE%8B"><span class="toc-number">3.6.</span> <span class="toc-text">Gulp 自动化构建案例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%81%E8%A3%85%E8%87%AA%E5%8A%A8%E5%8C%96%E6%9E%84%E5%BB%BA%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="toc-number">4.</span> <span class="toc-text">封装自动化构建工作流</span></a></li></ol></div></div></div><div class="tag-cloud"><div class="tag-cloud-tags"><a href="/tags/JS/" style="font-size: 30px; color: #8abcd1">JS</a> <a href="/tags/Vue/" style="font-size: 25.5px; color: #8cbad1">Vue</a> <a href="/tags/eggjs/" style="font-size: 16.5px; color: #91b7d0">eggjs</a> <a href="/tags/serverless/" style="font-size: 16.5px; color: #91b7d0">serverless</a> <a href="/tags/uniapp/" style="font-size: 21px; color: #8fb9d0">uniapp</a> <a href="/tags/vue/" style="font-size: 21px; color: #8fb9d0">vue</a> <a href="/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 16.5px; color: #91b7d0">小程序</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 16.5px; color: #91b7d0">工程化</a> <a href="/tags/%E6%97%A5%E8%AE%B0/" style="font-size: 12px; color: #93b5cf">日记</a> <a href="/tags/%E6%A6%82%E5%BF%B5/" style="font-size: 21px; color: #8fb9d0">概念</a> <a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 12px; color: #93b5cf">部署</a></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://xxcijmz.top/blogs/93700c07/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="语轻星子"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="轻语馆"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">自动化构建</h1><div class="post-meta"><div class="post-time" style="display:block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2021-10-10 13:22:38" itemprop="dateCreated datePublished" datetime="2021-10-10T13:22:38+08:00">2021-10-10</time><span class="post-meta-divider">-</span><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-2-line"></use></svg></span> <time title="修改时间：2021-10-14 22:11:48" itemprop="dateModified" datetime="2021-10-14T22:11:48+08:00">2021-10-14</time></div><span class="post-count"><span class="post-symbolcount"><span class="post-meta-item-icon" title="本文字数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-file-word-line"></use></svg></span> <span title="本文字数">6.1k</span><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读时长"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-timer-line"></use></svg></span> <span title="阅读时长">25m</span></span></span><div class="post-classify"><span class="post-category"> <span class="post-meta-item-icon" style="margin-right:3px;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span><span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/%E5%A4%A7%E5%89%8D%E7%AB%AF/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">大前端</span></a></span> > <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/%E5%A4%A7%E5%89%8D%E7%AB%AF/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">工程化</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag-item" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">工程化</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#5698c3;"><h2 id="自动化构建"><a href="#自动化构建" class="headerlink" title="自动化构建"></a>自动化构建</h2><blockquote>
+<p>一切重复工作本应自动化。</p>
+<p>源代码  ==自动化构建==&gt; 生产代码   （自动化构建工作流）</p>
+<p>作用：尽可能脱离运行环境兼容带来的问题，使得在开发阶段能够使用提高效率的语法、规范和标准，构建转换那些不被支持的【特性】</p>
+</blockquote>
+<h3 id="使用NPM-Script"><a href="#使用NPM-Script" class="headerlink" title="使用NPM Script"></a>使用NPM Script</h3><p>首先我们来使用scss工具来将scss文件转换为css文件</p>
+<ol>
+<li>新建scss文件</li>
+</ol>
+<pre class="language-scss" data-language="scss"><code class="language-scss"><span class="token property"><span class="token variable">$body-bg</span></span><span class="token punctuation">:</span>#f8f9fb<span class="token punctuation">;</span>
+<span class="token property"><span class="token variable">$body-color</span></span><span class="token punctuation">:</span>#333<span class="token punctuation">;</span>
+
+<span class="token selector">body</span><span class="token punctuation">&#123;</span>
+    <span class="token property">margin</span><span class="token punctuation">:</span> 0 auto<span class="token punctuation">;</span>
+    <span class="token property">padding</span><span class="token punctuation">:</span>20px<span class="token punctuation">;</span>
+    <span class="token property">max-width</span><span class="token punctuation">:</span>800px<span class="token punctuation">;</span>
+    <span class="token property">background-color</span><span class="token punctuation">:</span> <span class="token variable">$body-bg</span><span class="token punctuation">;</span>
+    <span class="token property">color</span><span class="token punctuation">:</span> <span class="token variable">$body-color</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></code></pre>
+
+<ol start="2">
+<li>安装scss依赖包</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">yarn add sass <span class="token operator">--</span>dev</code></pre>
+
+<ol start="3">
+<li>运行如下命令</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">.</span>\node_modules\<span class="token punctuation">.</span>bin\sass scss<span class="token operator">/</span>main<span class="token punctuation">.</span>scss css<span class="token operator">/</span>style<span class="token punctuation">.</span>css</code></pre>
+
+<ol start="4">
+<li>此时可以看见scss的命令行工具帮助我们生成了css与map.css文件</li>
+</ol>
+<p><img src="/blogs/93700c07/1.jpg" loading="lazy"></p>
+<div class="warning">
+
+<blockquote>
+<p>此种方法每次都要重复的输入这些复杂的命令，而且他人也无法理解如何执行这些命令。所以我们可以使用NPM Scripts。</p>
+</blockquote>
+</div>
+
+<p><img src="/blogs/93700c07/2.jpg" loading="lazy"></p>
+<ol start="5">
+<li>使用 yarn build，可以实现第3步同样的效果。</li>
+</ol>
+<p>同时，NPM Scripts也是实现自动化构建工作流的最简方式。</p>
+<ol>
+<li>安装browser-sync模块，用于启动测试服务器</li>
+<li>修改pakeage.json，使用preserve这种NPM Scripts中的钩子机制，来在serve前自动的进行scss编译转换</li>
+</ol>
+<p><img src="/blogs/93700c07/3.jpg" loading="lazy"></p>
+<ol start="3">
+<li>使用 yarn serve，来启动该网页。</li>
+<li>此时即可以完成在启动服务器自动的编译scss文件。</li>
+<li>为build命令添加 –watch命令，使得scss文件发生改变时会自动重新编译。</li>
+</ol>
+<p><img src="/blogs/93700c07/4.jpg" loading="lazy"></p>
+<p>​        但是此种情况会导致执行完build后卡住，无法继续执行serve命令</p>
+<p><img src="/blogs/93700c07/5.jpg" loading="lazy"></p>
+<ol start="6">
+<li>安装npm-run-all 模块</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">yarn add npm<span class="token operator">-</span>run<span class="token operator">-</span>all <span class="token operator">--</span>dev</code></pre>
+
+<ol start="7">
+<li>修改scripts</li>
+</ol>
+<p><img src="/blogs/93700c07/6.jpg" loading="lazy"></p>
+<ol start="8">
+<li>执行 npm run start命令，此时两个命令可以一同执行。且修改scss文件时会重新编译。</li>
+</ol>
+<p><img src="/blogs/93700c07/7.jpg" loading="lazy"></p>
+<ol start="9">
+<li>修改scripts，在browser-sync中添加如下参数，使得其可以检测文件变化并随之做出即使刷新</li>
+</ol>
+<p><img src="/blogs/93700c07/8.jpg" loading="lazy"></p>
+<h3 id="常用的自动化构建工具"><a href="#常用的自动化构建工具" class="headerlink" title="常用的自动化构建工具"></a>常用的自动化构建工具</h3><blockquote>
+<p>可以看到，NPM Script可以解决一些相对简单的自动化构建工作，但是对于一些复杂的构建工作而言，NPM Script则会显得很吃力。此时就需要更加专业的构建工具。</p>
+</blockquote>
+<p>市面上常用的自动化构建工具：</p>
+<p><img src="/blogs/93700c07/9.jpg" loading="lazy"></p>
+<div class="warning">
+
+<blockquote>
+<p>严格来说，Webpack算是模块打包工具，不算在自动化构建工具内</p>
+</blockquote>
+</div>
+
+<p>Grunt：构建速度慢，因为其工作过程是基于临时文件来实现的（磁盘读写）。</p>
+<p>Gulp：解决了Grunt中构建速度慢的问题，因为其是基于内存实现的，支持同时执行多个任务。</p>
+<p>FIS：百度团队推出，大而全，相对于前面两种微内核的形式，其更像一种捆绑套餐，将一些典型需求尽可能的集中在内部了。</p>
+<h2 id="Grunt"><a href="#Grunt" class="headerlink" title="Grunt"></a>Grunt</h2><h3 id="使用步骤"><a href="#使用步骤" class="headerlink" title="使用步骤"></a>使用步骤</h3><ol>
+<li>新建目录，初始化，安装grunt</li>
+</ol>
+<p><img src="/blogs/93700c07/10.jpg" loading="lazy"></p>
+<ol start="2">
+<li>新建gruntfile.js，写入如下代码</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// Grunt 的入口文件</span>
+<span class="token comment">// 用于定义一些需要 Grunt 自动执行的任务</span>
+<span class="token comment">// 需要导出一个函数</span>
+<span class="token comment">// 此函数接收一个 grunt 的形参，内部提供一些创建任务时可以用到的API</span>
+
+module<span class="token punctuation">.</span><span class="token function-variable function">exports</span> <span class="token operator">=</span> <span class="token parameter">grunt</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    grunt<span class="token punctuation">.</span><span class="token function">registerTask</span><span class="token punctuation">(</span><span class="token string">'foo'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'hello grunt~'</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span></code></pre>
+
+<ol start="3">
+<li>在命令行执行如下命令</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">yarn grunt foo</code></pre>
+
+<p>​        此时便可看到如下结果：</p>
+<p><img src="/blogs/93700c07/11.jpg" loading="lazy"></p>
+<ol start="4">
+<li>在导出的函数中新建一个任务，并为其添加第二个参数</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">grunt<span class="token punctuation">.</span><span class="token function">registerTask</span><span class="token punctuation">(</span><span class="token string">'bar'</span><span class="token punctuation">,</span> <span class="token string">'任务描述'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'other task~'</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span></code></pre>
+
+<ol start="5">
+<li><p>执行yarn grunt –help</p>
+<p>此时可以看到任务描述变为了自定义的任务描述</p>
+</li>
+</ol>
+<p><img src="/blogs/93700c07/12.jpg" loading="lazy"></p>
+<ol start="6">
+<li>在导出的函数中新建一个任务，任务名称为default</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">grunt<span class="token punctuation">.</span><span class="token function">registerTask</span><span class="token punctuation">(</span><span class="token string">'default'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'default task~'</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span></code></pre>
+
+<ol start="7">
+<li>此时这个任务会被当做grunt的默认任务，只需要输入yarn grunt即可执行该任务</li>
+</ol>
+<p><img src="/blogs/93700c07/13.jpg" loading="lazy"></p>
+<ol start="8">
+<li><p>使用default来映射任务</p>
+<p>将gruntfile.js修改为如下形式</p>
+</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// Grunt 的入口文件</span>
+<span class="token comment">// 用于定义一些需要 Grunt 自动执行的任务</span>
+<span class="token comment">// 需要导出一个函数</span>
+<span class="token comment">// 此函数接收一个 grunt 的形参，内部提供一些创建任务时可以用到的API</span>
+
+module<span class="token punctuation">.</span><span class="token function-variable function">exports</span> <span class="token operator">=</span> <span class="token parameter">grunt</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    grunt<span class="token punctuation">.</span><span class="token function">registerTask</span><span class="token punctuation">(</span><span class="token string">'foo'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'hello grunt~'</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+    grunt<span class="token punctuation">.</span><span class="token function">registerTask</span><span class="token punctuation">(</span><span class="token string">'bar'</span><span class="token punctuation">,</span> <span class="token string">'任务描述'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'other task~'</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+    grunt<span class="token punctuation">.</span><span class="token function">registerTask</span><span class="token punctuation">(</span><span class="token string">'default'</span><span class="token punctuation">,</span><span class="token punctuation">[</span><span class="token string">'foo'</span><span class="token punctuation">,</span><span class="token string">'bar'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span></code></pre>
+
+<ol start="9">
+<li>执行yarn grunt，此时会依次执行foo和bar任务。</li>
+</ol>
+<p><img src="/blogs/93700c07/14.jpg" loading="lazy"></p>
+<ol start="10">
+<li>添加如下代码，模拟grunt中的异步任务（grunt中默认支持同步模式，如果需要异步操作，必须使用this.async()来得到一个回调函数，在异步任务完成后调用这个回调函数来表示异步任务完成）</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">grunt<span class="token punctuation">.</span><span class="token function">registerTask</span><span class="token punctuation">(</span><span class="token string">'async-task'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> done <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">async</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+            console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'async task working~'</span><span class="token punctuation">)</span>
+            <span class="token function">done</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span><span class="token number">5000</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span></code></pre>
+
+<h3 id="标记任务失败"><a href="#标记任务失败" class="headerlink" title="标记任务失败"></a>标记任务失败</h3><blockquote>
+<p>如果在构建任务的逻辑代码中发生错误，例如需要的文件找不到了，此时便可以将该任务标记为一个失败的任务，具体实现方式为在函数体return false。</p>
+</blockquote>
+<ol>
+<li>任务函数执行过程中如果返回 false，则意味着此任务执行失败</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span><span class="token function-variable function">exports</span> <span class="token operator">=</span> <span class="token parameter">grunt</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 任务函数执行过程中如果返回 false</span>
+  <span class="token comment">// 则意味着此任务执行失败</span>
+  grunt<span class="token punctuation">.</span><span class="token function">registerTask</span><span class="token punctuation">(</span><span class="token string">'bad'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'bad working~'</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token boolean">false</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span></code></pre>
+
+<p>执行结果：</p>
+<p><img src="/blogs/93700c07/15.jpg" loading="lazy"></p>
+<ol start="2">
+<li>如果一个任务列表中的某个任务执行失败，则后续任务默认不会运行，除非 grunt 运行时指定 –force 参数强制执行</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span><span class="token function-variable function">exports</span> <span class="token operator">=</span> <span class="token parameter">grunt</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  grunt<span class="token punctuation">.</span><span class="token function">registerTask</span><span class="token punctuation">(</span><span class="token string">'bad'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'bad working~'</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token boolean">false</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+  grunt<span class="token punctuation">.</span><span class="token function">registerTask</span><span class="token punctuation">(</span><span class="token string">'foo'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'foo working~'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+  grunt<span class="token punctuation">.</span><span class="token function">registerTask</span><span class="token punctuation">(</span><span class="token string">'bar'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'bar working~'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+  <span class="token comment">// 如果一个任务列表中的某个任务执行失败</span>
+  <span class="token comment">// 则后续任务默认不会运行</span>
+  <span class="token comment">// 除非 grunt 运行时指定 --force 参数强制执行</span>
+  grunt<span class="token punctuation">.</span><span class="token function">registerTask</span><span class="token punctuation">(</span><span class="token string">'default'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'foo'</span><span class="token punctuation">,</span> <span class="token string">'bad'</span><span class="token punctuation">,</span> <span class="token string">'bar'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span></code></pre>
+
+<p><img src="/blogs/93700c07/16.jpg" loading="lazy"></p>
+<p><img src="/blogs/93700c07/17.jpg" loading="lazy"></p>
+<ol start="3">
+<li>异步函数中标记当前任务执行失败的方式是为回调函数指定一个 false 的实参</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span><span class="token function-variable function">exports</span> <span class="token operator">=</span> <span class="token parameter">grunt</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    grunt<span class="token punctuation">.</span><span class="token function">registerTask</span><span class="token punctuation">(</span><span class="token string">'bad-async'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> done <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">async</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+            console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'async task working~'</span><span class="token punctuation">)</span>
+            <span class="token function">done</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token number">1000</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span></code></pre>
+
+<p><img src="/blogs/93700c07/18.jpg" loading="lazy"></p>
+<h3 id="配置选项方法"><a href="#配置选项方法" class="headerlink" title="配置选项方法"></a>配置选项方法</h3><blockquote>
+<p>除了registerTask方法之外，grunt还提供了一个用于添加配置选项的API：initConfig。</p>
+</blockquote>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span><span class="token function-variable function">exports</span> <span class="token operator">=</span> <span class="token parameter">grunt</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// grunt.initConfig() 用于为任务添加一些配置选项</span>
+  grunt<span class="token punctuation">.</span><span class="token function">initConfig</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+    <span class="token comment">// 键一般对应任务的名称</span>
+    <span class="token comment">// 值可以是任意类型的数据</span>
+    foo<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      bar<span class="token operator">:</span> <span class="token string">'baz'</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+  grunt<span class="token punctuation">.</span><span class="token function">registerTask</span><span class="token punctuation">(</span><span class="token string">'foo'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// 任务中可以使用 grunt.config() 获取配置</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>grunt<span class="token punctuation">.</span><span class="token function">config</span><span class="token punctuation">(</span><span class="token string">'foo'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token comment">// 如果属性值是对象的话，config 中可以使用点的方式定位对象中属性的值</span>
+    <span class="token comment">// 一般不需要.的形式，因为我们可以通过获取grunt.config('foo')先获取对象，再在这个对象上获取属性。22+</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>grunt<span class="token punctuation">.</span><span class="token function">config</span><span class="token punctuation">(</span><span class="token string">'foo.bar'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span></code></pre>
+
+<p><img src="/blogs/93700c07/19.jpg" loading="lazy"></p>
+<h3 id="多目标任务"><a href="#多目标任务" class="headerlink" title="多目标任务"></a>多目标任务</h3><blockquote>
+<p>除了普通的任务形式以外，grunt中还支持一种叫做多目标形式的任务。</p>
+</blockquote>
+<ol>
+<li>写入如下代码，并运行，可以看到其提示未给build任务提供targets</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span><span class="token function-variable function">exports</span> <span class="token operator">=</span> <span class="token parameter">grunt</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 多目标模式，可以让任务根据配置形成多个子任务</span>
+
+  grunt<span class="token punctuation">.</span><span class="token function">registerMultiTask</span><span class="token punctuation">(</span><span class="token string">'build'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token number">111</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span></code></pre>
+
+<p><img src="/blogs/93700c07/20.jpg" loading="lazy"></p>
+<p>这是因为在写多目标任务时，我们需要为多目标任务配置不同的目标</p>
+<ol start="2">
+<li>设置initConfig，并重新执行，可以发现其会同时运行两个目标</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span><span class="token function-variable function">exports</span> <span class="token operator">=</span> <span class="token parameter">grunt</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 多目标模式，可以让任务根据配置形成多个子任务</span>
+
+  grunt<span class="token punctuation">.</span><span class="token function">initConfig</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+    build<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      css<span class="token operator">:</span> <span class="token string">'1'</span><span class="token punctuation">,</span>
+      js<span class="token operator">:</span><span class="token string">'2'</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+  grunt<span class="token punctuation">.</span><span class="token function">registerMultiTask</span><span class="token punctuation">(</span><span class="token string">'build'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'build task'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span></code></pre>
+
+<p><img src="/blogs/93700c07/21.jpg" loading="lazy"></p>
+<ol start="3">
+<li>使用build:子目标名称来运行子目标</li>
+</ol>
+<p><img src="/blogs/93700c07/22.jpg" loading="lazy"></p>
+<ol start="4">
+<li>通过this.target获取执行目标，通过this.data获取执行目标数据</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span><span class="token function-variable function">exports</span> <span class="token operator">=</span> <span class="token parameter">grunt</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 多目标模式，可以让任务根据配置形成多个子任务</span>
+
+  grunt<span class="token punctuation">.</span><span class="token function">initConfig</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+    build<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      css<span class="token operator">:</span> <span class="token string">'1'</span><span class="token punctuation">,</span>
+      js<span class="token operator">:</span><span class="token string">'2'</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+  grunt<span class="token punctuation">.</span><span class="token function">registerMultiTask</span><span class="token punctuation">(</span><span class="token string">'build'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">task: build, target: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span><span class="token keyword">this</span><span class="token punctuation">.</span>target<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string">, data: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span><span class="token keyword">this</span><span class="token punctuation">.</span>data<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+</code></pre>
+
+<p><img src="/blogs/93700c07/23.jpg" loading="lazy"></p>
+<div class="warning">
+
+<blockquote>
+<p>除了options以外，config中所有的属性的键都会被作为任务的目标。</p>
+</blockquote>
+</div>
+
+<ol start="5">
+<li>添加options选项，并执行，可以看到options并没有被作为任务的子目标，同时我们可以根据this.options()输出options的内容</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span><span class="token function-variable function">exports</span> <span class="token operator">=</span> <span class="token parameter">grunt</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 多目标模式，可以让任务根据配置形成多个子任务</span>
+
+  grunt<span class="token punctuation">.</span><span class="token function">initConfig</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+    build<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      options<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        foo<span class="token operator">:</span><span class="token string">'bar'</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      css<span class="token operator">:</span> <span class="token string">'1'</span><span class="token punctuation">,</span>
+      js<span class="token operator">:</span><span class="token string">'2'</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+  grunt<span class="token punctuation">.</span><span class="token function">registerMultiTask</span><span class="token punctuation">(</span><span class="token string">'build'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">options</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">task: build, target: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span><span class="token keyword">this</span><span class="token punctuation">.</span>target<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string">, data: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span><span class="token keyword">this</span><span class="token punctuation">.</span>data<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+</code></pre>
+
+<p><img src="/blogs/93700c07/24.jpg" loading="lazy"></p>
+<ol start="6">
+<li>给子目标添加options属性，可以看到此时子目标中的options会覆盖大的options选项</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span><span class="token function-variable function">exports</span> <span class="token operator">=</span> <span class="token parameter">grunt</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 多目标模式，可以让任务根据配置形成多个子任务</span>
+
+  grunt<span class="token punctuation">.</span><span class="token function">initConfig</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+    build<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      options<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        foo<span class="token operator">:</span><span class="token string">'bar'</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      css<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        options<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+          foo<span class="token operator">:</span><span class="token string">'xxc'</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      js<span class="token operator">:</span><span class="token string">'2'</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+  grunt<span class="token punctuation">.</span><span class="token function">registerMultiTask</span><span class="token punctuation">(</span><span class="token string">'build'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">options</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">task: build, target: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span><span class="token keyword">this</span><span class="token punctuation">.</span>target<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string">, data: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span><span class="token keyword">this</span><span class="token punctuation">.</span>data<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+</code></pre>
+
+<p><img src="/blogs/93700c07/25.jpg" loading="lazy"></p>
+<h3 id="插件的使用"><a href="#插件的使用" class="headerlink" title="插件的使用"></a>插件的使用</h3><blockquote>
+<p>插件机制是grunt的核心，由于很多构建任务是通用的，所以社区中出现了很多预设的插件，这些插件内部封装了很多通用的构建任务，一般构建过程都是由这些通用的构建任务组成的。</p>
+</blockquote>
+<p>此时使用grunt-contrib-clean做使用过程演示</p>
+<ol>
+<li>安装插件</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">yarn add grunt<span class="token operator">-</span>contrib<span class="token operator">-</span>clean</code></pre>
+
+<ol start="2">
+<li>修改gruntfile.js</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span><span class="token function-variable function">exports</span> <span class="token operator">=</span> <span class="token parameter">grunt</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 使用clean插件需要配置对应的目标</span>
+  grunt<span class="token punctuation">.</span><span class="token function">initConfig</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+    clean<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token comment">// temp: 'temp/app.js'</span>
+      <span class="token comment">// 表示删除temp下的所有js文件</span>
+      <span class="token comment">// temp: 'temp/*.js'</span>
+      <span class="token comment">// 删除temp下所有的文件</span>
+      temp<span class="token operator">:</span> <span class="token string">'temp/**'</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+  
+  grunt<span class="token punctuation">.</span><span class="token function">loadNpmTasks</span><span class="token punctuation">(</span><span class="token string">'grunt-contrib-clean'</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span></code></pre>
+
+<ol start="3">
+<li>运行插件，此时可以看到temp下的所有文件被删除</li>
+</ol>
+<p><img src="/blogs/93700c07/26.jpg" loading="lazy"></p>
+<h3 id="常用插件及总结"><a href="#常用插件及总结" class="headerlink" title="常用插件及总结"></a>常用插件及总结</h3><blockquote>
+<p>grunt-sass：编译sass文件</p>
+</blockquote>
+<ol>
+<li>安装grunt-sass及sass模板支持</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">yarn add grunt<span class="token operator">-</span>sass sass <span class="token operator">--</span>dev</code></pre>
+
+<ol start="2">
+<li>在gruntfile.js中写入如下代码，并执行sass任务，此时便可以看到该任务编译了sass文件并生成了css文件。</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> sass <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'sass'</span><span class="token punctuation">)</span>
+
+module<span class="token punctuation">.</span><span class="token function-variable function">exports</span> <span class="token operator">=</span> <span class="token parameter">grunt</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  grunt<span class="token punctuation">.</span><span class="token function">initConfig</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+    sass<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      options<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        implementation<span class="token operator">:</span> sass  <span class="token comment">// 此处需要配置implementation来表名使用哪个模块来处理sass的编译</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      main<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        files<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+          <span class="token string">'dist/css/main.css'</span><span class="token operator">:</span><span class="token string">'src/scss/main.scss'</span>
+        <span class="token punctuation">&#125;</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+  grunt<span class="token punctuation">.</span><span class="token function">loadNpmTasks</span><span class="token punctuation">(</span><span class="token string">'grunt-sass'</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span></code></pre>
+
+<p><img src="/blogs/93700c07/27.jpg" loading="lazy"></p>
+<ol start="3">
+<li>将options改为如下形式，此时执行会生成相应的map文件</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">options<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    sourceMap<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    implementation<span class="token operator">:</span> sass  <span class="token comment">// 此处需要配置implementation来表名使用哪个模块来处理sass的编译</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">,</span></code></pre>
+
+<blockquote>
+<p>grunt-babel：编译ES6代码</p>
+</blockquote>
+<ol>
+<li>安装babel相关依赖</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">yarn add grunt<span class="token operator">-</span>babel @babel<span class="token operator">/</span>core @babel<span class="token operator">/</span>preset<span class="token operator">-</span>env <span class="token operator">--</span>dev</code></pre>
+
+<ol start="2">
+<li>安装loadGruntTask模块，来减少loadNpmTasks的使用复杂度。</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">yarn add load<span class="token operator">-</span>grunt<span class="token operator">-</span>tasks <span class="token operator">--</span>dev</code></pre>
+
+<ol start="3">
+<li>在gruntfile.js中添加代码，并执行yarn grunt babel，此时可以看到编译后的js文件生成</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> sass <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'sass'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> loadGruntTasks <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'load-grunt-tasks'</span><span class="token punctuation">)</span>
+
+module<span class="token punctuation">.</span><span class="token function-variable function">exports</span> <span class="token operator">=</span> <span class="token parameter">grunt</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  grunt<span class="token punctuation">.</span><span class="token function">initConfig</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+    sass<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      options<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        sourceMap<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+        implementation<span class="token operator">:</span> sass  <span class="token comment">// 此处需要配置implementation来表名使用哪个模块来处理sass的编译</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      main<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        files<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+          <span class="token string">'dist/css/main.css'</span><span class="token operator">:</span><span class="token string">'src/scss/main.scss'</span>
+        <span class="token punctuation">&#125;</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    babel<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      options<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 此处设为@babel/preset-env，则会将最新的ECMAScript特性都加载进来</span>
+        presets<span class="token operator">:</span><span class="token punctuation">[</span><span class="token string">'@babel/preset-env'</span><span class="token punctuation">]</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      main<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        files<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+          <span class="token string">'dist/js/app.js'</span><span class="token operator">:</span><span class="token string">'src/js/app.js'</span>
+        <span class="token punctuation">&#125;</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+  <span class="token comment">// grunt.loadNpmTasks('grunt-sass')	</span>
+  <span class="token function">loadGruntTasks</span><span class="token punctuation">(</span>grunt<span class="token punctuation">)</span>   <span class="token comment">// 自动加载所有的 grunt 插件中的任务,不需要再使用loadNpmTasks一个个加载任务</span>
+<span class="token punctuation">&#125;</span></code></pre>
+
+<p><img src="/blogs/93700c07/28.jpg" loading="lazy"></p>
+<ol start="4">
+<li>同时babel也支持sourceMap选项。</li>
+</ol>
+<blockquote>
+<p>grunt-contrib-watch：用于检测文件变化及时刷新</p>
+</blockquote>
+<ol>
+<li>安装模块</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">yarn add grunt<span class="token operator">-</span>contrib<span class="token operator">-</span>watch <span class="token operator">--</span>dev</code></pre>
+
+<ol start="2">
+<li>在gruntfile.js中添加代码，并执行yarn grunt watch</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> sass <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'sass'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> loadGruntTasks <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'load-grunt-tasks'</span><span class="token punctuation">)</span>
+
+module<span class="token punctuation">.</span><span class="token function-variable function">exports</span> <span class="token operator">=</span> <span class="token parameter">grunt</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  grunt<span class="token punctuation">.</span><span class="token function">initConfig</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+    sass<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      options<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        sourceMap<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+        implementation<span class="token operator">:</span> sass  <span class="token comment">// 此处需要配置implementation来表名使用哪个模块来处理sass的编译</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      main<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        files<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+          <span class="token string">'dist/css/main.css'</span><span class="token operator">:</span><span class="token string">'src/scss/main.scss'</span>
+        <span class="token punctuation">&#125;</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    babel<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      options<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 此处设为@babel/preset-env，则会将最新的ECMAScript特性都加载进来</span>
+        presets<span class="token operator">:</span><span class="token punctuation">[</span><span class="token string">'@babel/preset-env'</span><span class="token punctuation">]</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      main<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        files<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+          <span class="token string">'dist/js/app.js'</span><span class="token operator">:</span><span class="token string">'src/js/app.js'</span>
+        <span class="token punctuation">&#125;</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    watch<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      js<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        files<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'src/js/*.js'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        tasks<span class="token operator">:</span><span class="token punctuation">[</span><span class="token string">'babel'</span><span class="token punctuation">]</span>   <span class="token comment">// tasks表示文件发生改变后要执行哪些任务。</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      css<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        files<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'src/scss/*.scss'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        tasks<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'sass'</span><span class="token punctuation">]</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+  <span class="token comment">// grunt.loadNpmTasks('grunt-sass')</span>
+  <span class="token function">loadGruntTasks</span><span class="token punctuation">(</span>grunt<span class="token punctuation">)</span>   <span class="token comment">// 自动加载所有的 grunt 插件中的任务</span>
+<span class="token punctuation">&#125;</span></code></pre>
+
+<p><img src="/blogs/93700c07/30.jpg" loading="lazy"></p>
+<p>可以看到watch并不能直接执行babel和sass命令，而是要等到改变后才执行</p>
+<ol start="3">
+<li>为watch添加映射</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">grunt<span class="token punctuation">.</span><span class="token function">registerTask</span><span class="token punctuation">(</span><span class="token string">'default'</span><span class="token punctuation">,</span><span class="token punctuation">[</span><span class="token string">'sass'</span><span class="token punctuation">,</span><span class="token string">'babel'</span><span class="token punctuation">,</span><span class="token string">'watch'</span><span class="token punctuation">]</span><span class="token punctuation">)</span></code></pre>
+
+<ol start="4">
+<li>运行default任务</li>
+</ol>
+<p><img src="/blogs/93700c07/29.jpg" loading="lazy"></p>
+<p>此时可以看到能够会先执行sass和babel再指向watch。</p>
+<h2 id="Gulp"><a href="#Gulp" class="headerlink" title="Gulp"></a>Gulp</h2><h3 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h3><blockquote>
+<p>Gulp作为当下最流行的前端构建工具，核心的特点就是高效、易用，因为使用gulp的过程非常简单。先在项目中安装gulp开发依赖，然后在根目录中新建gulpfile.js文件来编写需要gulp自动执行的构建任务，然后就可以在命令行终端使用gulp提供的cli去运行这些构建任务。</p>
+</blockquote>
+<p>使用步骤：</p>
+<ol>
+<li>初始化项目目录，并安装gulp模块（安装时会自动安装一个gulp-cli的模块）</li>
+</ol>
+<p><img src="/blogs/93700c07/31.jpg" loading="lazy"></p>
+<ol start="2">
+<li>在项目根目录中新建一个gulpfile.js文件，并添加如下代码，然后运行</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// gulp 的入口文件</span>
+
+exports<span class="token punctuation">.</span><span class="token function-variable function">foo</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'foo task working~~~'</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span></code></pre>
+
+<p><img src="/blogs/93700c07/32.jpg" loading="lazy"></p>
+<p>可以看到有一个报错：foo任务执行未完成，是否忘记标识任务的结束</p>
+<p>原因：在最新版的gulp中取消了同步代码模式，约定每一个任务都是异步任务，在任务执行完成之后需要调用回调函数或其它的方式标记这个任务已经完成。</p>
+<ol start="3">
+<li>修改代码，传入形参done，并在函数体内执行。此时再次执行代码可以看到代码成功执行且未发生错误</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// gulp 的入口文件</span>
+
+exports<span class="token punctuation">.</span><span class="token function-variable function">foo</span> <span class="token operator">=</span> <span class="token parameter">done</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'foo task working~~~'</span><span class="token punctuation">)</span>
+
+    <span class="token function">done</span><span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment">// 标识任务完成</span>
+<span class="token punctuation">&#125;</span></code></pre>
+
+<p><img src="/blogs/93700c07/33.jpg" loading="lazy"></p>
+<ol start="4">
+<li>添加default任务，此时运行gulp会默认执行default任务</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">exports<span class="token punctuation">.</span><span class="token function-variable function">default</span> <span class="token operator">=</span> <span class="token parameter">done</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'default task working~~~'</span><span class="token punctuation">)</span>
+
+    <span class="token function">done</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span></code></pre>
+
+<p><img src="/blogs/93700c07/34.jpg" loading="lazy"></p>
+<ol start="5">
+<li>使用gulp4.0以前的api定义任务并执行</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> gulp <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'gulp'</span><span class="token punctuation">)</span>
+
+gulp<span class="token punctuation">.</span><span class="token function">task</span><span class="token punctuation">(</span><span class="token string">'bar'</span><span class="token punctuation">,</span> <span class="token parameter">done</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'bar working'</span><span class="token punctuation">)</span>
+    <span class="token function">done</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span></code></pre>
+
+<p><img src="/blogs/93700c07/35.jpg" loading="lazy"></p>
+<p>可以看到其能够执行成功，但是这种方式已经不被推荐了。</p>
+<h3 id="创建组合任务"><a href="#创建组合任务" class="headerlink" title="创建组合任务"></a>创建组合任务</h3><blockquote>
+<p>除了创建普通的任务以外，gulp的最新版本还提供了series和parallel这两个用来创建组合任务的api，有了这两个api后就可以很轻松的创建并行任务和串行任务。</p>
+</blockquote>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token punctuation">&#123;</span> series<span class="token punctuation">,</span> parallel <span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'gulp'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> <span class="token function-variable function">task1</span> <span class="token operator">=</span> <span class="token parameter">done</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'task1 working~'</span><span class="token punctuation">)</span>
+    <span class="token function">done</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token number">1000</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">const</span> <span class="token function-variable function">task2</span> <span class="token operator">=</span> <span class="token parameter">done</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'task2 working~'</span><span class="token punctuation">)</span>
+    <span class="token function">done</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token number">1000</span><span class="token punctuation">)</span>  
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">const</span> <span class="token function-variable function">task3</span> <span class="token operator">=</span> <span class="token parameter">done</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'task3 working~'</span><span class="token punctuation">)</span>
+    <span class="token function">done</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token number">1000</span><span class="token punctuation">)</span>  
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 让多个任务按照顺序依次执行</span>
+exports<span class="token punctuation">.</span>foo <span class="token operator">=</span> <span class="token function">series</span><span class="token punctuation">(</span>task1<span class="token punctuation">,</span> task2<span class="token punctuation">,</span> task3<span class="token punctuation">)</span>
+
+<span class="token comment">// 让多个任务同时执行</span>
+exports<span class="token punctuation">.</span>bar <span class="token operator">=</span> <span class="token function">parallel</span><span class="token punctuation">(</span>task1<span class="token punctuation">,</span> task2<span class="token punctuation">,</span> task3<span class="token punctuation">)</span>
+</code></pre>
+
+<p><img src="/blogs/93700c07/36.jpg" loading="lazy"></p>
+<p><img src="/blogs/93700c07/37.jpg" loading="lazy"></p>
+<div class="success">
+
+<blockquote>
+<p>我们编译css和js任务，它们由于互不干扰，所以可以使用parallel并行的方式来创建。</p>
+<p>部署时需要先编译，此时就需要使用series这种串行的模式来执行任务。</p>
+</blockquote>
+<p>​    </p></div><p></p>
+<h3 id="异步任务的三种方式"><a href="#异步任务的三种方式" class="headerlink" title="异步任务的三种方式"></a>异步任务的三种方式</h3><blockquote>
+<p>gulp中的任务都是异步任务，也就相当于异步函数，调用异步函数时使无法明确函数是否完成，都是在函数内部通过回调或事件的方式通知外部这个函数执行完成，那我们如何通知gulp函数执行完成？</p>
+</blockquote>
+<p>方式一：</p>
+<p>使用回调函数来通知函数完成</p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">exports<span class="token punctuation">.</span><span class="token function-variable function">callback</span> <span class="token operator">=</span> <span class="token parameter">done</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'callback task'</span><span class="token punctuation">)</span>
+  <span class="token function">done</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span></code></pre>
+
+<p>这种回调函数与Node中的回调函数相同，都是错误优先的回调函数</p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">exports<span class="token punctuation">.</span><span class="token function-variable function">callback_error</span> <span class="token operator">=</span> <span class="token parameter">done</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'callback task'</span><span class="token punctuation">)</span>
+  <span class="token function">done</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">'task failed'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment">// 通过给回调函数的第一个参数添加错误对象。</span>
+<span class="token punctuation">&#125;</span></code></pre>
+
+<p><img src="/blogs/93700c07/38.jpg" loading="lazy"></p>
+<p>此时会提示错误信息，且若是多个任务同时执行的话，后续的任务也不会继续工作了。</p>
+<p>方式二：</p>
+<p>使用Promise的方式</p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">exports<span class="token punctuation">.</span><span class="token function-variable function">promise</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'promise task'</span><span class="token punctuation">)</span>
+  <span class="token keyword">return</span> Promise<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span><span class="token punctuation">)</span>	<span class="token comment">// resolve中不需要传值</span>
+<span class="token punctuation">&#125;</span>
+
+exports<span class="token punctuation">.</span><span class="token function-variable function">promise_error</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'promise task'</span><span class="token punctuation">)</span>
+  <span class="token keyword">return</span> Promise<span class="token punctuation">.</span><span class="token function">reject</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">'task failed'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>	<span class="token comment">// 返回失败的promise时，gulp会认为其是一个失败的任务，并停止后续任务的执行</span>
+<span class="token punctuation">&#125;</span></code></pre>
+
+<p><img src="/blogs/93700c07/39.jpg" loading="lazy"></p>
+<p>或者使用async/await的形式(注意async函数返回的是一个Promise对象)：</p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token function-variable function">timeout</span> <span class="token operator">=</span> <span class="token parameter">time</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span><span class="token parameter">resolve</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token function">setTimeout</span><span class="token punctuation">(</span>resolve<span class="token punctuation">,</span> time<span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+exports<span class="token punctuation">.</span><span class="token function-variable function">async</span> <span class="token operator">=</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">await</span> <span class="token function">timeout</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'async task'</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span></code></pre>
+
+<p><img src="/blogs/93700c07/40.jpg" loading="lazy"></p>
+<p>方式三：</p>
+<p>使用stream的方式，其结束时间为readStream 执行end事件的时候</p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">exports<span class="token punctuation">.</span><span class="token function-variable function">stream</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">const</span> read <span class="token operator">=</span> fs<span class="token punctuation">.</span><span class="token function">createReadStream</span><span class="token punctuation">(</span><span class="token string">'yarn.lock'</span><span class="token punctuation">)</span>
+  <span class="token keyword">const</span> write <span class="token operator">=</span> fs<span class="token punctuation">.</span><span class="token function">createWriteStream</span><span class="token punctuation">(</span><span class="token string">'a.txt'</span><span class="token punctuation">)</span>
+  read<span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>write<span class="token punctuation">)</span>  <span class="token comment">// 将read中的文件复制到write中</span>
+  <span class="token keyword">return</span> read
+<span class="token punctuation">&#125;</span></code></pre>
+
+<p><img src="/blogs/93700c07/41.jpg" loading="lazy"></p>
+<p>模拟gulp中结束任务的操作：</p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript">exports<span class="token punctuation">.</span><span class="token function-variable function">stream</span> <span class="token operator">=</span> <span class="token parameter">done</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">const</span> read <span class="token operator">=</span> fs<span class="token punctuation">.</span><span class="token function">createReadStream</span><span class="token punctuation">(</span><span class="token string">'yarn.lock'</span><span class="token punctuation">)</span>
+  <span class="token keyword">const</span> write <span class="token operator">=</span> fs<span class="token punctuation">.</span><span class="token function">createWriteStream</span><span class="token punctuation">(</span><span class="token string">'a.txt'</span><span class="token punctuation">)</span>
+  read<span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>write<span class="token punctuation">)</span>
+  read<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'end'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token function">done</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span></code></pre>
+
+<h3 id="构建过程核心工作原理"><a href="#构建过程核心工作原理" class="headerlink" title="构建过程核心工作原理"></a>构建过程核心工作原理</h3><blockquote>
+<p>构建过程大多数情况下都是将文件读出来，进行一些转换，最后写入到另外一些位置。</p>
+</blockquote>
+<p><img src="/blogs/93700c07/42.jpg" loading="lazy"></p>
+<p><img src="/blogs/93700c07/43.jpg" loading="lazy"></p>
+<ol>
+<li>不带加工的读取流与写入流</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> fs <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'fs'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> <span class="token punctuation">&#123;</span> Transform <span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'stream'</span><span class="token punctuation">)</span>
+
+exports<span class="token punctuation">.</span><span class="token function-variable function">default</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 文件读取流</span>
+  <span class="token keyword">const</span> readStream <span class="token operator">=</span> fs<span class="token punctuation">.</span><span class="token function">createReadStream</span><span class="token punctuation">(</span><span class="token string">'normalize.css'</span><span class="token punctuation">)</span>
+
+  <span class="token comment">// 文件写入流</span>
+  <span class="token keyword">const</span> writeStream <span class="token operator">=</span> fs<span class="token punctuation">.</span><span class="token function">createWriteStream</span><span class="token punctuation">(</span><span class="token string">'normalize.min.css'</span><span class="token punctuation">)</span>
+
+  <span class="token comment">// 把读取出来的文件流导入写入文件流</span>
+  readStream<span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>writeStream<span class="token punctuation">)</span>
+  <span class="token keyword">return</span> readStream
+<span class="token punctuation">&#125;</span>
+</code></pre>
+
+<ol start="2">
+<li>带加工的代码</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> fs <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'fs'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> <span class="token punctuation">&#123;</span> Transform <span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'stream'</span><span class="token punctuation">)</span>
+
+exports<span class="token punctuation">.</span><span class="token function-variable function">default</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 文件读取流</span>
+  <span class="token keyword">const</span> readStream <span class="token operator">=</span> fs<span class="token punctuation">.</span><span class="token function">createReadStream</span><span class="token punctuation">(</span><span class="token string">'normalize.css'</span><span class="token punctuation">)</span>
+
+  <span class="token comment">// 文件写入流</span>
+  <span class="token keyword">const</span> writeStream <span class="token operator">=</span> fs<span class="token punctuation">.</span><span class="token function">createWriteStream</span><span class="token punctuation">(</span><span class="token string">'normalize.min.css'</span><span class="token punctuation">)</span>
+
+  <span class="token comment">// 文件转换流</span>
+  <span class="token keyword">const</span> transformStream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Transform</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+    <span class="token comment">// 核心转换过程</span>
+    <span class="token function-variable function">transform</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token parameter">chunk<span class="token punctuation">,</span> encoding<span class="token punctuation">,</span> callback</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>   <span class="token comment">// 通过chunk获取文件读取流的文件内容</span>
+      <span class="token keyword">const</span> input <span class="token operator">=</span> chunk<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment">// 通过toString的方式将字节数组变为字符串</span>
+      <span class="token keyword">const</span> output <span class="token operator">=</span> input<span class="token punctuation">.</span><span class="token function">replace</span><span class="token punctuation">(</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">\s+</span><span class="token regex-delimiter">/</span><span class="token regex-flags">g</span></span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">replace</span><span class="token punctuation">(</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">\/\*.+?\*\/</span><span class="token regex-delimiter">/</span><span class="token regex-flags">g</span></span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">)</span>
+      <span class="token function">callback</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> output<span class="token punctuation">)</span>  <span class="token comment">// 错误优先的回调函数，第一个参数为null代表没有错误，output将最为转换后的结果导出</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">return</span> readStream
+    <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>transformStream<span class="token punctuation">)</span> <span class="token comment">// 转换</span>
+   	<span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>writeStream<span class="token punctuation">)</span> <span class="token comment">// 写入</span>
+<span class="token punctuation">&#125;</span>
+</code></pre>
+
+<div class="success">
+
+<blockquote>
+<p>gulp官方的定义为：The streaming build system（基于流的构建系统），gulp希望实现一个构建管道的概念，这样后期使用插件时就会有一个很统一的方式。</p>
+</blockquote>
+</div>
+
+<h3 id="文件操作-API"><a href="#文件操作-API" class="headerlink" title="文件操作 API"></a>文件操作 API</h3><blockquote>
+<p>gulp中提供了专门用于创建读取流和写入流的API，相比于底层Node的API，gulp的API更强大也更容易使用。而转换流一般是通过独立的插件来提供。</p>
+</blockquote>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token punctuation">&#123;</span> src<span class="token punctuation">,</span> dest <span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'gulp'</span><span class="token punctuation">)</span>   <span class="token comment">// 引入gulp中的读取文件APIsrc与写入文件APIdest</span>
+<span class="token keyword">const</span> cleanCSS <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'gulp-clean-css'</span><span class="token punctuation">)</span>  <span class="token comment">// 此插件提供了压缩css代码的转换流</span>
+<span class="token keyword">const</span> rename <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'gulp-rename'</span><span class="token punctuation">)</span>   <span class="token comment">// 此插件提供了重命名文件后缀的转换流</span>
+
+exports<span class="token punctuation">.</span><span class="token function-variable function">default</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token function">src</span><span class="token punctuation">(</span><span class="token string">'src/*.css'</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span><span class="token function">cleanCSS</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span><span class="token function">rename</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> extname<span class="token operator">:</span> <span class="token string">'.min.css'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment">// extname用于设置重名名文件的扩展名</span>
+    <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span><span class="token function">dest</span><span class="token punctuation">(</span><span class="token string">'dist'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span></code></pre>
+
+<h3 id="Gulp-自动化构建案例"><a href="#Gulp-自动化构建案例" class="headerlink" title="Gulp 自动化构建案例"></a>Gulp 自动化构建案例</h3><pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token punctuation">&#123;</span> src<span class="token punctuation">,</span> dest<span class="token punctuation">,</span> parallel<span class="token punctuation">,</span> series<span class="token punctuation">,</span> watch <span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'gulp'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> del <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'del'</span><span class="token punctuation">)</span>  <span class="token comment">// 引入删除文件的插件</span>
+<span class="token keyword">const</span> browserSync <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'browser-sync'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> loadPlugins <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'gulp-load-plugins'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> plugins <span class="token operator">=</span> <span class="token function">loadPlugins</span><span class="token punctuation">(</span><span class="token punctuation">)</span>   <span class="token comment">// 使用gulp-load-plugins插件后，之后通过其实例.插件名即可自动加载插件，而不需要像下方那样一个个手动引入</span>
+<span class="token comment">// 注意这种方式只能自动引入gulp-开头的插件，且如果出现gulp-aaa-bbb这种名字的插件，使用时要写成 plugins.aaaBbb</span>
+
+<span class="token comment">// const sass = require('gulp-sass');  // 引入sass转css插件</span>
+<span class="token comment">// const babel = require('gulp-babel');  // 引入gulp-babel，下载这个插件同时还要下载@babel/core和@babel/preset-env（用于转换所有最新特性为ES5）</span>
+<span class="token comment">// const swig = require('gulp-swig');    // 引入模板引擎转换插件</span>
+<span class="token comment">// const imagemin = require('gulp-imagemin') // 引入压缩图片、字体的插件</span>
+
+<span class="token keyword">const</span> bs <span class="token operator">=</span> browserSync<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment">// 模板引擎的渲染数据</span>
+<span class="token keyword">const</span> data <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  menus<span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">&#123;</span>
+      name<span class="token operator">:</span> <span class="token string">'Home'</span><span class="token punctuation">,</span>
+      icon<span class="token operator">:</span> <span class="token string">'aperture'</span><span class="token punctuation">,</span>
+      link<span class="token operator">:</span> <span class="token string">'index.html'</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span>
+      name<span class="token operator">:</span> <span class="token string">'Features'</span><span class="token punctuation">,</span>
+      link<span class="token operator">:</span> <span class="token string">'features.html'</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span>
+      name<span class="token operator">:</span> <span class="token string">'About'</span><span class="token punctuation">,</span>
+      link<span class="token operator">:</span> <span class="token string">'about.html'</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span>
+      name<span class="token operator">:</span> <span class="token string">'Contact'</span><span class="token punctuation">,</span>
+      link<span class="token operator">:</span> <span class="token string">'#'</span><span class="token punctuation">,</span>
+      children<span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+          name<span class="token operator">:</span> <span class="token string">'Twitter'</span><span class="token punctuation">,</span>
+          link<span class="token operator">:</span> <span class="token string">'https://twitter.com/w_zce'</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#123;</span>
+          name<span class="token operator">:</span> <span class="token string">'About'</span><span class="token punctuation">,</span>
+          link<span class="token operator">:</span> <span class="token string">'https://weibo.com/zceme'</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#123;</span>
+          name<span class="token operator">:</span> <span class="token string">'divider'</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#123;</span>
+          name<span class="token operator">:</span> <span class="token string">'About'</span><span class="token punctuation">,</span>
+          link<span class="token operator">:</span> <span class="token string">'https://github.com/zce'</span>
+        <span class="token punctuation">&#125;</span>
+      <span class="token punctuation">]</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  pkg<span class="token operator">:</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./package.json'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  date<span class="token operator">:</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">const</span> <span class="token function-variable function">clean</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token function">del</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'dist'</span><span class="token punctuation">,</span> <span class="token string">'temp'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment">// del返回的是一个promise，此处的temp为一个生成的临时文件</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">const</span> <span class="token function-variable function">style</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token function">src</span><span class="token punctuation">(</span><span class="token string">'src/assets/styles/*.scss'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> base<span class="token operator">:</span> <span class="token string">'src'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>   <span class="token comment">// 通过设置基准路径base，使得基准路径后面的文件路径保留下来</span>
+    <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>plugins<span class="token punctuation">.</span><span class="token function">sass</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> outputStyle<span class="token operator">:</span> <span class="token string">'expanded'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">)</span>   <span class="token comment">// 添加sass编译转换流，将sass文件转为css文件，只会转换没有下划线开头的sass文件,设置outputStyle后可以让css选择器的结束括号单独占一行</span>
+    <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span><span class="token function">dest</span><span class="token punctuation">(</span><span class="token string">'temp'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>   <span class="token comment">// 输出目标目录，放到临时目录中，以便后续执行useref不会冲突。</span>
+  <span class="token comment">// .pipe(bs.reload(&#123; stream: true &#125;))</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">const</span> <span class="token function-variable function">script</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token function">src</span><span class="token punctuation">(</span><span class="token string">'src/assets/scripts/*.js'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> base<span class="token operator">:</span> <span class="token string">'src'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>plugins<span class="token punctuation">.</span><span class="token function">babel</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> presets<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'@babel/preset-env'</span><span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">)</span>   <span class="token comment">// 若没传presets，可能会导致转换没有效果的问题出现</span>
+    <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span><span class="token function">dest</span><span class="token punctuation">(</span><span class="token string">'temp'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">const</span> <span class="token function-variable function">page</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token function">src</span><span class="token punctuation">(</span><span class="token string">'src/**/*.html'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> base<span class="token operator">:</span> <span class="token string">'src'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>             <span class="token comment">// 此种src写法表示匹配src下任意子目录的html文件</span>
+    <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>plugins<span class="token punctuation">.</span><span class="token function">swig</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> data <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">)</span>   <span class="token comment">// 传入data</span>
+    <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span><span class="token function">dest</span><span class="token punctuation">(</span><span class="token string">'temp'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">const</span> <span class="token function-variable function">image</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token function">src</span><span class="token punctuation">(</span><span class="token string">'src/assets/images/**'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> base<span class="token operator">:</span> <span class="token string">'src'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>plugins<span class="token punctuation">.</span><span class="token function">imagemin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>   <span class="token comment">// 图片压缩，此种压缩是无损的，只是将图片里一些无用的信息去除了。</span>
+    <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span><span class="token function">dest</span><span class="token punctuation">(</span><span class="token string">'dist'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">const</span> <span class="token function-variable function">font</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token function">src</span><span class="token punctuation">(</span><span class="token string">'src/assets/fonts/**'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> base<span class="token operator">:</span> <span class="token string">'src'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>plugins<span class="token punctuation">.</span><span class="token function">imagemin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span><span class="token function">dest</span><span class="token punctuation">(</span><span class="token string">'dist'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// public下的文件</span>
+<span class="token keyword">const</span> <span class="token function-variable function">extra</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token function">src</span><span class="token punctuation">(</span><span class="token string">'public/**'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> base<span class="token operator">:</span> <span class="token string">'public'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span><span class="token function">dest</span><span class="token punctuation">(</span><span class="token string">'dist'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">const</span> <span class="token function-variable function">serve</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 使用gulp中的watch方法来监视文件并执行命令，而一旦执行命令生成新文件，bs.init就会监测到从而刷新浏览器。</span>
+  <span class="token function">watch</span><span class="token punctuation">(</span><span class="token string">'src/assets/styles/*.scss'</span><span class="token punctuation">,</span> style<span class="token punctuation">)</span>
+  <span class="token function">watch</span><span class="token punctuation">(</span><span class="token string">'src/assets/scripts/*.js'</span><span class="token punctuation">,</span> script<span class="token punctuation">)</span>
+  <span class="token function">watch</span><span class="token punctuation">(</span><span class="token string">'src/**/*.html'</span><span class="token punctuation">,</span> page<span class="token punctuation">)</span>
+
+  <span class="token comment">// 下面这些文件并非一改变就需要重新执行任务</span>
+  <span class="token comment">// watch('src/assets/images/**', image)</span>
+  <span class="token comment">// watch('src/assets/fonts/**', font)</span>
+  <span class="token comment">// watch('public/**', extra)</span>
+
+  <span class="token function">watch</span><span class="token punctuation">(</span><span class="token punctuation">[</span>
+    <span class="token string">'src/assets/images/**'</span><span class="token punctuation">,</span>
+    <span class="token string">'src/assets/fonts/**'</span><span class="token punctuation">,</span>
+    <span class="token string">'public/**'</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span> bs<span class="token punctuation">.</span>reload<span class="token punctuation">)</span>   <span class="token comment">// 文件更改后浏览器重新加载，以便拿到最新的文件。而不用重新编译</span>
+
+  bs<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+    notify<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>    <span class="token comment">// 关闭右上角的小提示</span>
+    port<span class="token operator">:</span> <span class="token number">2080</span><span class="token punctuation">,</span>   <span class="token comment">// 设置端口</span>
+    <span class="token comment">// open: false,    // 取消自动打开浏览器</span>
+    files<span class="token operator">:</span> <span class="token string">'temp/**'</span><span class="token punctuation">,</span>    <span class="token comment">// 指定temp下面的所有文件修改时更新浏览器,也可以不写这个参数，而是改为在每一个任务中添加reload，这样watch调用后就可以直接reload。</span>
+    server<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      baseDir<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'temp'</span><span class="token punctuation">,</span> <span class="token string">'src'</span><span class="token punctuation">,</span> <span class="token string">'public'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>   <span class="token comment">// 浏览器运行目录，此处添加的src和public是为了在开发阶段能够找到src和public下的文件</span>
+      routes<span class="token operator">:</span> <span class="token punctuation">&#123;</span>   <span class="token comment">// routes中的配置优先于baseDir</span>
+        <span class="token string">'/node_modules'</span><span class="token operator">:</span> <span class="token string">'node_modules'</span>   <span class="token comment">// 此项设置之后，若有请求以/node_modules开头的，都会指向根目录下的node_modules文件，避免由于dist目录下没有相应文件而出错的情况发生</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">const</span> <span class="token function-variable function">useref</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>    <span class="token comment">// 把构建注释(compile时自动生成)当中引入的资源全部合并到同一个文件中。并执行压缩</span>
+  <span class="token keyword">return</span> <span class="token function">src</span><span class="token punctuation">(</span><span class="token string">'temp/*.html'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> base<span class="token operator">:</span> <span class="token string">'temp'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>   <span class="token comment">// 读取dist根目录下的所有html文件，并执行接下来的操作</span>
+    <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>plugins<span class="token punctuation">.</span><span class="token function">useref</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> searchPath<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'temp'</span><span class="token punctuation">,</span> <span class="token string">'.'</span><span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment">// searchPath指定要合并文件在哪些目录下找</span>
+    <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>plugins<span class="token punctuation">.</span><span class="token function">if</span><span class="token punctuation">(</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">\.js$</span><span class="token regex-delimiter">/</span></span><span class="token punctuation">,</span> plugins<span class="token punctuation">.</span><span class="token function">uglify</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment">// 判断是否为js文件，若是则执行哪个插件</span>
+    <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>plugins<span class="token punctuation">.</span><span class="token function">if</span><span class="token punctuation">(</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">\.css$</span><span class="token regex-delimiter">/</span></span><span class="token punctuation">,</span> plugins<span class="token punctuation">.</span><span class="token function">cleanCss</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment">// 判断是否为css文件，若是则执行哪个插件</span>
+    <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>plugins<span class="token punctuation">.</span><span class="token function">if</span><span class="token punctuation">(</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">\.html$</span><span class="token regex-delimiter">/</span></span><span class="token punctuation">,</span> plugins<span class="token punctuation">.</span><span class="token function">htmlmin</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+      collapseWhitespace<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>   <span class="token comment">// 将换行空格压缩</span>
+      minifyCSS<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>  <span class="token comment">// 将css标签中的代码压缩</span>
+      minifyJS<span class="token operator">:</span> <span class="token boolean">true</span>  <span class="token comment">// 将script标签中的代码压缩</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment">// 判断是否为html文件，若是则执行哪个插件，此处需要配置相关选项，否则只会压缩一些符号间的空格</span>
+    <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span><span class="token function">dest</span><span class="token punctuation">(</span><span class="token string">'dist'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">const</span> compile <span class="token operator">=</span> <span class="token function">parallel</span><span class="token punctuation">(</span>style<span class="token punctuation">,</span> script<span class="token punctuation">,</span> page<span class="token punctuation">)</span>   <span class="token comment">// 将src下的文件编译河滨为一个任务，由于图片和字体不需要在开发阶段构建，所以不需要在此处添加</span>
+
+<span class="token comment">// 上线前打包任务</span>
+<span class="token keyword">const</span> build <span class="token operator">=</span> <span class="token function">series</span><span class="token punctuation">(</span>
+  clean<span class="token punctuation">,</span>
+  <span class="token function">parallel</span><span class="token punctuation">(</span>
+    <span class="token function">series</span><span class="token punctuation">(</span>compile<span class="token punctuation">,</span> useref<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    image<span class="token punctuation">,</span>
+    font<span class="token punctuation">,</span>
+    extra
+  <span class="token punctuation">)</span>
+<span class="token punctuation">)</span> <span class="token comment">// 将所有文件编译合并为一个任务，并使用series确保clean先执行，然后在执行编译,此处需要加image和font</span>
+
+<span class="token keyword">const</span> develop <span class="token operator">=</span> <span class="token function">series</span><span class="token punctuation">(</span>compile<span class="token punctuation">,</span> serve<span class="token punctuation">)</span>
+
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  build<span class="token punctuation">,</span>
+  clean<span class="token punctuation">,</span>
+  develop
+<span class="token punctuation">&#125;</span></code></pre>
+
+<p>修改package.json中的script</p>
+<p><img src="/blogs/93700c07/44.jpg" loading="lazy"></p>
+<p>此后根据 yarn clean、yarn build、yarn develop即可执行相应代码。</p>
+<p>在.gitignore中添加下面两项</p>
+<pre class="language-txt" data-language="txt"><code class="language-txt">dist
+
+temp</code></pre>
+
+
+
+<h2 id="封装自动化构建工作流"><a href="#封装自动化构建工作流" class="headerlink" title="封装自动化构建工作流"></a>封装自动化构建工作流</h2><blockquote>
+<p>当我们涉及到要去开发多个同类型的项目，那我们的自动化构建工作流应该是一样的，这时我们就需要在多个项目中重复使用构建任务，而这些构建任务绝大多数情况下都是相同的，所以我们就需要解决gulpfile复用的问题。我们可以保存代码段，但是这种方式会导致一旦gulpfile需要修复或升级时，我们需要对每个使用到这个gulpfile的项目做修改，不适合整体项目的维护。此时就需要我们去封装自动化构建工作流。</p>
+</blockquote>
+<p>待补……</p>
+</div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>语轻星子</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://xxcijmz.top/blogs/93700c07/" title="自动化构建">https://xxcijmz.top/blogs/93700c07/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/blogs/a80c3058/" rel="prev" title="Vue Router原理实现"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-left-s-line"></use></svg><span class="post-nav-text">Vue Router原理实现</span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/blogs/7db00131/" rel="next" title="前端工程化"><span class="post-nav-text">前端工程化</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div class="hty-card" id="comment"><div class="comment-tooltip text-center"><span>要不要和我说些什么？</span><br></div><div id="valine-container"></div><script>Yun.utils.getScript("https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js", () => {
+  const valineConfig = {"enable":true,"appId":"MnqOxUn1tp2XfaBiRJqcPNC3-MdYXbMMI","appKey":"BUJAYYUt5IhdIDVVvHH8aHMx","placeholder":"来与我一起讨论吧","avatar":null,"pageSize":10,"visitor":false,"highlight":true,"recordIP":false,"enableQQ":true,"meta":["nick"],"el":"#valine-container","lang":"zh-cn"}
+  valineConfig.path = "/blogs/93700c07/"
+  new Valine(valineConfig)
+}, window.Valine);</script></div></main><footer class="sidebar-translate" id="footer"><div class="beian"><a rel="noopener" href="https://beian.miit.gov.cn/" target="_blank">闽ICP备2021017107号</a></div><div class="copyright"><span>&copy; 2021 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> 语轻星子</span></div><div class="live_time"><span>本博客已运行：</span><span id="display_live_time"></span><script>function blog_live_time() {
+  setTimeout(blog_live_time, 1000);
+  const start = new Date('2021-09-23T00:03:00');
+  const now = new Date();
+  const timeDiff = (now.getTime() - start.getTime());
+  const msPerMinute = 60 * 1000;
+  const msPerHour = 60 * msPerMinute;
+  const msPerDay = 24 * msPerHour;
+  const passDay = Math.floor(timeDiff / msPerDay);
+  const passHour = Math.floor((timeDiff % msPerDay) / 60 / 60 / 1000);
+  const passMinute = Math.floor((timeDiff % msPerHour) / 60 / 1000);
+  const passSecond = Math.floor((timeDiff % msPerMinute) / 1000);
+  display_live_time.innerHTML = " " + passDay + " 天 " + passHour + " 小时 " + passMinute + " 分 " + passSecond + " 秒";
+}
+blog_live_time();
+</script></div></footer><a class="hty-icon-button" id="back-to-top" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#5698c3" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script defer src="https://cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script><script defer src="https://cdn.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"></script><script defer src="/js/search/algolia-search.js"></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-close-line"></use></svg></span></div><div class="search-input-container"></div><div class="algolia-results"><div id="algolia-stats"></div><div id="algolia-hits"></div><div class="algolia-pagination" id="algolia-pagination"></div></div></div></div><script src="https://cdn.jsdelivr.net/npm/live2d-widget@^3.1.3/lib/L2Dwidget.min.js"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.9},"dialog":{"enable":true},"log":false});</script></body></html>
