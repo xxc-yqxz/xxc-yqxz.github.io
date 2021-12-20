@@ -1,0 +1,231 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#5698c3"><meta name="author" content="语轻星子"><meta name="copyright" content="语轻星子"><meta name="generator" content="Hexo 5.4.0"><meta name="theme" content="hexo-theme-yun"><title>LG-React中VirtualDOM及Diff算法 | 轻语馆</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.25/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_dxory92pb0h.js" async></script><link id="light-prism-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@latest/themes/prism.css" media="(prefers-color-scheme: light)"><link id="dark-prism-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@latest/themes/prism-tomorrow.css" media="(prefers-color-scheme: dark)"><link rel="icon" href="/yun.svg"><link rel="mask-icon" href="/yun.svg" color="#5698c3"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"hostname":"xxcijmz.top","root":"/","title":"轻语馆","version":"1.6.2","mode":"time","copycode":true,"page":{"isPost":true},"i18n":{"placeholder":"搜索...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）"},"anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"/data/sentences.json"},"algolia":{"appID":"I6Q6TFSWKC","apiKey":"8299a265813c86a465cc32755761abc9","indexName":"blogs","hits":{"per_page":10}}};
+  </script><link rel="stylesheet" href="/css/hexo-theme-yun.css"><script src="/js/utils.js"></script><script src="/js/hexo-theme-yun.js"></script><link rel="stylesheet" href="/css/content.css"><meta name="description" content="Virtual DOM 及 Diff 算法JSX 到底是什么使用 React 就一定会写 JSX，JSX 到底是什么呢？它是一种 JavaScript 语法的扩展，React 使用它来描述用户界面长成什么样子。虽然它看起来非常像 HTML，但它确实是 JavaScript 。在 React 代码执行之前，Babel 会对将 JSX 编译为 React API. &lt;div className&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LG-React中VirtualDOM及Diff算法">
+<meta property="og:url" content="https://xxcijmz.top/blogs/cb0fa0de/index.html">
+<meta property="og:site_name" content="轻语馆">
+<meta property="og:description" content="Virtual DOM 及 Diff 算法JSX 到底是什么使用 React 就一定会写 JSX，JSX 到底是什么呢？它是一种 JavaScript 语法的扩展，React 使用它来描述用户界面长成什么样子。虽然它看起来非常像 HTML，但它确实是 JavaScript 。在 React 代码执行之前，Babel 会对将 JSX 编译为 React API. &lt;div className&amp;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xxcijmz.top/blogs/cb0fa0de/1.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/cb0fa0de/2.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/cb0fa0de/3.jpg">
+<meta property="og:image" content="https://xxcijmz.top/blogs/cb0fa0de/4.jpg">
+<meta property="article:published_time" content="2021-12-20T14:12:04.000Z">
+<meta property="article:modified_time" content="2021-12-20T14:52:38.557Z">
+<meta property="article:author" content="语轻星子">
+<meta property="article:tag" content="React">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://xxcijmz.top/blogs/cb0fa0de/1.jpg"><script src="/js/ui/mode.js"></script></head><body><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="语轻星子"><img width="96" loading="lazy" src="https://cdn.jsdelivr.net/gh/xxc-yqxz/xxc-yqxz.github.io/images/avatar.jpg" alt="语轻星子"></a><div class="site-author-name"><a href="/about/">语轻星子</a></div><span class="site-name">轻语馆</span><sub class="site-subtitle">我也会加油，所以你也要加油，这是约定</sub><div class="site-desciption"></div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">40</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">9</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">11</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://github.com/xxc-yqxz/xxc-yqxz.github.io" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://wpa.qq.com/msgrd?v=3&amp;uin=894043590&amp;site=qq&amp;menu=yes" title="QQ" target="_blank" style="color:#12B7F5"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-qq-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://music.163.com/#/user/home?id=1379764422" title="网易云音乐" target="_blank" style="color:#C10D0C"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-netease-cloud-music-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://space.bilibili.com/269921139" title="哔哩哔哩" target="_blank" style="color:#FF8EB3"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-bilibili-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Virtual-DOM-%E5%8F%8A-Diff-%E7%AE%97%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">Virtual DOM 及 Diff 算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JSX-%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.1.</span> <span class="toc-text">JSX 到底是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DOM-%E6%93%8D%E4%BD%9C%E9%97%AE%E9%A2%98"><span class="toc-number">1.2.</span> <span class="toc-text">DOM 操作问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-Virtual-DOM"><span class="toc-number">1.3.</span> <span class="toc-text">什么是 Virtual DOM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Virtual-DOM-%E5%A6%82%E4%BD%95%E6%8F%90%E5%8D%87%E6%95%88%E7%8E%87"><span class="toc-number">1.4.</span> <span class="toc-text">Virtual DOM 如何提升效率</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAVirtual-DOM-%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.5.</span> <span class="toc-text">创建Virtual DOM 对象</span></a></li></ol></li></ol></div></div></div><div class="tag-cloud"><div class="tag-cloud-tags"><a href="/tags/JS/" style="font-size: 26.4px; color: #8cbbd1">JS</a> <a href="/tags/React/" style="font-size: 19.2px; color: #8fb8d0">React</a> <a href="/tags/Vue/" style="font-size: 30px; color: #8abcd1">Vue</a> <a href="/tags/eggjs/" style="font-size: 19.2px; color: #8fb8d0">eggjs</a> <a href="/tags/serverless/" style="font-size: 19.2px; color: #8fb8d0">serverless</a> <a href="/tags/uniapp/" style="font-size: 22.8px; color: #8eb9d0">uniapp</a> <a href="/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 15.6px; color: #91b6cf">小程序</a> <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" style="font-size: 15.6px; color: #91b6cf">工程化</a> <a href="/tags/%E6%97%A5%E8%AE%B0/" style="font-size: 12px; color: #93b5cf">日记</a> <a href="/tags/%E6%A6%82%E5%BF%B5/" style="font-size: 22.8px; color: #8eb9d0">概念</a> <a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 12px; color: #93b5cf">部署</a></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://xxcijmz.top/blogs/cb0fa0de/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="语轻星子"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="轻语馆"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">LG-React中VirtualDOM及Diff算法</h1><div class="post-meta"><div class="post-time" style="display:block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2021-12-20 22:12:04" itemprop="dateCreated datePublished" datetime="2021-12-20T22:12:04+08:00">2021-12-20</time></div><span class="post-count"><span class="post-symbolcount"><span class="post-meta-item-icon" title="本文字数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-file-word-line"></use></svg></span> <span title="本文字数">1.5k</span><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读时长"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-timer-line"></use></svg></span> <span title="阅读时长">6m</span></span></span><div class="post-classify"><span class="post-tag"><a class="tag-item" href="/tags/React/" style="--text-color:#61dafb"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">React</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#5698c3;"><h2 id="Virtual-DOM-及-Diff-算法"><a href="#Virtual-DOM-及-Diff-算法" class="headerlink" title="Virtual DOM 及 Diff 算法"></a>Virtual DOM 及 Diff 算法</h2><h3 id="JSX-到底是什么"><a href="#JSX-到底是什么" class="headerlink" title="JSX 到底是什么"></a>JSX 到底是什么</h3><p>使用 React 就一定会写 JSX，JSX 到底是什么呢？它是一种 JavaScript 语法的扩展，React 使用它来描述用户界面长成什么样子。虽然它看起来非常像 HTML，但它确实是 JavaScript 。在 React 代码执行之前，Babel 会对将 JSX 编译为 React API.</p>
+<pre class="language-react" data-language="react"><code class="language-react">&lt;div className&#x3D;&quot;container&quot;&gt;
+  &lt;h3&gt;Hello React&lt;&#x2F;h3&gt;
+  &lt;p&gt;React is great &lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<p>以上 jsx 代码在执行前会被编译为以下代码：</p>
+<pre class="language-react" data-language="react"><code class="language-react">React.createElement(		&#x2F;&#x2F; 第一个参数为 节点类型，第二个参数为 节点属性，第三个以后参数为 当前节点的子节点。
+  &quot;div&quot;,
+  &#123;
+    className: &quot;container&quot;
+  &#125;,
+  React.createElement(&quot;h3&quot;, null, &quot;Hello React&quot;),
+  React.createElement(&quot;p&quot;, null, &quot;React is great&quot;)
+);</code></pre>
+
+<p>从两种语法对比来看，JSX 语法的出现是为了让 React 开发人员编写用户界面代码更加轻松。</p>
+<p>React.createElement 方法的作用是创建 Virtual DOM 对象（用 javascript 对象来描述 dom 对象信息的一种方式）。React.createElement 的返回值就是 Virtual DOM。</p>
+<p>也就是说 我们写的 JSX 会先通过 React.createElement 转为 Virtual DOM 对象，然后 React 再将 Virtual DOM 对象转换为真实 DOM 对象，再将其显示到页面当中。我们才能在浏览器中见到相应页面。</p>
+<p><a target="_blank" rel="noopener" href="https://babeljs.io/repl">Babel REPL</a></p>
+<p>以下为 Babel REPL 编译前后 jsx 格式：</p>
+<p><img src="/blogs/cb0fa0de/1.jpg" loading="lazy"></p>
+<h3 id="DOM-操作问题"><a href="#DOM-操作问题" class="headerlink" title="DOM 操作问题"></a>DOM 操作问题</h3><p>在现代 web 应用程序中使用 JavaScript 操作 DOM 是必不可少的，但遗憾的是它比其他大多数 JavaScript 操作要慢的多。</p>
+<p>在没有Virtual DOM前，大多数 JavaScript 框架对于 DOM 的更新远远超过其必须进行的更新，从而使得这种缓慢操作变得更糟。</p>
+<p>例如假设你有包含十项列表的页面，你仅仅更改了列表中的第一项，大多数 JavaScript 框架会重建整个列表，这比必要的工作要多十倍。</p>
+<p>更新效率低下已经成为严重问题，为了解决这个问题，React 普及了一种叫做 Virtual DOM 的东西，Virtual DOM 出现的目的就是为了提高 JavaScript 操作 DOM 对象的效率。</p>
+<h3 id="什么是-Virtual-DOM"><a href="#什么是-Virtual-DOM" class="headerlink" title="什么是 Virtual DOM"></a>什么是 Virtual DOM</h3><p>在 React 中，每个 DOM 对象都有一个对应的 Virtual DOM 对象，它是 DOM 对象的 JavaScript 对象表现形式，其实就是使用 JavaScript 对象来描述 DOM 对象信息，比如 DOM 对象的类型是什么，它身上有哪些属性，它拥有哪些子元素。</p>
+<p>可以把 Virtual DOM 对象理解为 DOM 对象的副本，但是它不能直接显示在屏幕上。</p>
+<pre class="language-react" data-language="react"><code class="language-react">&lt;div className&#x3D;&quot;container&quot;&gt;
+  &lt;h3&gt;Hello React&lt;&#x2F;h3&gt;
+  &lt;p&gt;React is great &lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<pre class="language-react" data-language="react"><code class="language-react">&#123;
+  type: &quot;div&quot;,
+  props: &#123; className: &quot;container&quot; &#125;,
+  children: [
+    &#123;
+      type: &quot;h3&quot;,
+      props: null,
+      children: [
+        &#123;
+          type: &quot;text&quot;,
+          props: &#123;
+            textContent: &quot;Hello React&quot;
+          &#125;
+        &#125;
+      ]
+    &#125;,
+    &#123;
+      type: &quot;p&quot;,
+      props: null,
+      children: [
+        &#123;
+          type: &quot;text&quot;,
+          props: &#123;
+            textContent: &quot;React is great&quot;
+          &#125;
+        &#125;
+      ]
+    &#125;
+  ]
+&#125;</code></pre>
+
+<h3 id="Virtual-DOM-如何提升效率"><a href="#Virtual-DOM-如何提升效率" class="headerlink" title="Virtual DOM 如何提升效率"></a>Virtual DOM 如何提升效率</h3><p>精准找出发生变化的 DOM 对象，只更新发生变化的部分。</p>
+<p>在 React 第一次创建 DOM 对象后，会为每个 DOM 对象创建其对应的 Virtual DOM 对象，在 DOM 对象发生更新之前，React 会先更新所有的 Virtual DOM 对象，然后 React 会将更新后的 Virtual DOM 和 更新前的 Virtual DOM 进行比较，从而找出发生变化的部分，React 会将发生变化的部分更新到真实的 DOM 对象中，React 仅更新必要更新的部分。</p>
+<p>虽然在更新真实dom对象之前进行了更新 virtual dom 对象的操作以及对象对比的操作，但是 javascript 操作 javascript 的对象是很快的。</p>
+<p>Virtual DOM 对象的更新和比较仅发生在内存中，不会在视图中渲染任何内容，所以这一部分的性能损耗成本是微不足道的。</p>
+<p><img src="/blogs/cb0fa0de/2.jpg" loading="lazy"></p>
+<pre class="language-react" data-language="react"><code class="language-react">&lt;div id&#x3D;&quot;container&quot;&gt;
+	&lt;p&gt;Hello React&lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<pre class="language-react" data-language="react"><code class="language-react">&lt;div id&#x3D;&quot;container&quot;&gt;
+	&lt;p&gt;Hello Angular&lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;</code></pre>
+
+<pre class="language-react" data-language="react"><code class="language-react">const before &#x3D; &#123;
+  type: &quot;div&quot;,
+  props: &#123; id: &quot;container&quot; &#125;,
+  children: [
+    &#123;
+      type: &quot;p&quot;,
+      props: null,
+      children: [
+        &#123; type: &quot;text&quot;, props: &#123; textContent: &quot;Hello React&quot; &#125; &#125;
+      ]
+    &#125;
+  ]
+&#125;</code></pre>
+
+<pre class="language-react" data-language="react"><code class="language-react">const after &#x3D; &#123;
+  type: &quot;div&quot;,
+  props: &#123; id: &quot;container&quot; &#125;,
+  children: [
+    &#123;
+      type: &quot;p&quot;,
+      props: null,
+      children: [
+        &#x2F;&#x2F; react 经过层层比较，发现只有此处的textContent 发生了变化，所以只会将其更新到 真实dom 中
+        &#123; type: &quot;text&quot;, props: &#123; textContent: &quot;Hello Angular&quot; &#125; &#125;
+      ]
+    &#125;
+  ]
+&#125;</code></pre>
+
+<h3 id="创建Virtual-DOM-对象"><a href="#创建Virtual-DOM-对象" class="headerlink" title="创建Virtual DOM 对象"></a>创建Virtual DOM 对象</h3><p>实现创建 Virtual DOM 对象的方法之前，我们需要保证webpack 编译时使用我们所创建的方法，因此需要进行配置：</p>
+<p><img src="/blogs/cb0fa0de/3.jpg" loading="lazy"></p>
+<ol>
+<li>在项目根目录中创建 <strong>.babelrc</strong>，写入配置：</li>
+</ol>
+<pre class="language-none"><code class="language-none">&#123;
+    &quot;presets&quot;:[
+        &quot;@babel&#x2F;preset-env&quot;,
+        [
+            &quot;@babel&#x2F;preset-react&quot;,
+            &#123;
+                &quot;pragma&quot;:&quot;TinyReact.createElement&quot;	&#x2F;&#x2F; 表示使用 TinyReact 中的 createElement 方法来编译jsx
+            &#125;
+        ]
+    ]
+&#125;</code></pre>
+
+<ol start="2">
+<li>创建 TinyReact/createElement.js，写入基本的 createElement 代码：</li>
+</ol>
+<pre class="language-react" data-language="react"><code class="language-react">export default function createElement(type, props, ...children) &#123;
+    return &#123;
+        type,
+        props,
+        children
+    &#125;
+&#125;</code></pre>
+
+<ol start="3">
+<li>在 TinyReact/index.js 中导入</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> createElement <span class="token keyword">from</span> <span class="token string">'./createElement'</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
+    createElement
+<span class="token punctuation">&#125;</span></code></pre>
+
+<ol start="4">
+<li>在 index.js 中导入，并写入一段 jsx 语法，输出观察其编译后的格式：</li>
+</ol>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> TinyReact <span class="token keyword">from</span> <span class="token string">'./TinyReact'</span>
+
+<span class="token keyword">const</span> virtualDOM <span class="token operator">=</span> <span class="token punctuation">(</span>
+    <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"container"</span><span class="token operator">></span>
+        <span class="token operator">&lt;</span>h1<span class="token operator">></span>你好 Tiny React<span class="token operator">&lt;</span><span class="token operator">/</span>h1<span class="token operator">></span>
+        <span class="token operator">&lt;</span>h2<span class="token operator">></span><span class="token punctuation">(</span>编码必杀技<span class="token punctuation">)</span><span class="token operator">&lt;</span><span class="token operator">/</span>h2<span class="token operator">></span>
+        <span class="token operator">&lt;</span>div<span class="token operator">></span>
+            嵌套<span class="token number">1</span> <span class="token operator">&lt;</span>div<span class="token operator">></span>嵌套 <span class="token number">1.1</span><span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+        <span class="token operator">&lt;</span>h3<span class="token operator">></span><span class="token punctuation">(</span>观察<span class="token operator">:</span> 这个将会被改变<span class="token punctuation">)</span><span class="token operator">&lt;</span><span class="token operator">/</span>h3<span class="token operator">></span>
+        <span class="token punctuation">&#123;</span><span class="token number">2</span> <span class="token operator">==</span> <span class="token number">1</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">&lt;</span>div<span class="token operator">></span>如果<span class="token number">2</span>和<span class="token number">1</span>相等渲染当前内容<span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span><span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#123;</span><span class="token number">2</span> <span class="token operator">==</span> <span class="token number">2</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">&lt;</span>div<span class="token operator">></span><span class="token number">2</span><span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span><span class="token punctuation">&#125;</span>
+        <span class="token operator">&lt;</span>span<span class="token operator">></span>这是一段内容<span class="token operator">&lt;</span><span class="token operator">/</span>span<span class="token operator">></span>
+        <span class="token operator">&lt;</span>button onClick<span class="token operator">=</span><span class="token punctuation">&#123;</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token function">alert</span><span class="token punctuation">(</span><span class="token string">"你好"</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span><span class="token operator">></span>点击我<span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">></span>
+        <span class="token operator">&lt;</span>h3<span class="token operator">></span>这个将会被删除<span class="token operator">&lt;</span><span class="token operator">/</span>h3<span class="token operator">></span>
+      <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+<span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>virtualDOM<span class="token punctuation">)</span></code></pre>
+
+<p>结果如下：</p>
+<p><img src="/blogs/cb0fa0de/4.jpg" loading="lazy"></p>
+</div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>语轻星子</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://xxcijmz.top/blogs/cb0fa0de/" title="LG-React中VirtualDOM及Diff算法">https://xxcijmz.top/blogs/cb0fa0de/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"></div><div class="post-nav-item"><a class="post-nav-next" href="/blogs/1a53f83b/" rel="next" title="LG—React基础回顾"><span class="post-nav-text">LG—React基础回顾</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div class="hty-card" id="comment"><div class="comment-tooltip text-center"><span>要不要和我说些什么？</span><br></div><div id="valine-container"></div><script>Yun.utils.getScript("https://cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js", () => {
+  const valineConfig = {"enable":true,"appId":"MnqOxUn1tp2XfaBiRJqcPNC3-MdYXbMMI","appKey":"BUJAYYUt5IhdIDVVvHH8aHMx","placeholder":"来与我一起讨论吧","avatar":null,"pageSize":10,"visitor":false,"highlight":true,"recordIP":false,"enableQQ":true,"meta":["nick"],"el":"#valine-container","lang":"zh-cn"}
+  valineConfig.path = "/blogs/cb0fa0de/"
+  new Valine(valineConfig)
+}, window.Valine);</script></div></main><footer class="sidebar-translate" id="footer"><div class="beian"><a rel="noopener" href="https://beian.miit.gov.cn/" target="_blank">闽ICP备2021017107号-1</a></div><div class="copyright"><span>&copy; 2021 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> 语轻星子</span></div><div class="live_time"><span>本博客已运行：</span><span id="display_live_time"></span><script>function blog_live_time() {
+  setTimeout(blog_live_time, 1000);
+  const start = new Date('2021-09-23T00:03:00');
+  const now = new Date();
+  const timeDiff = (now.getTime() - start.getTime());
+  const msPerMinute = 60 * 1000;
+  const msPerHour = 60 * msPerMinute;
+  const msPerDay = 24 * msPerHour;
+  const passDay = Math.floor(timeDiff / msPerDay);
+  const passHour = Math.floor((timeDiff % msPerDay) / 60 / 60 / 1000);
+  const passMinute = Math.floor((timeDiff % msPerHour) / 60 / 1000);
+  const passSecond = Math.floor((timeDiff % msPerMinute) / 1000);
+  display_live_time.innerHTML = " " + passDay + " 天 " + passHour + " 小时 " + passMinute + " 分 " + passSecond + " 秒";
+}
+blog_live_time();
+</script></div></footer><a class="hty-icon-button" id="back-to-top" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#5698c3" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script defer src="https://cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script><script defer src="https://cdn.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"></script><script defer src="/js/search/algolia-search.js"></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-close-line"></use></svg></span></div><div class="search-input-container"></div><div class="algolia-results"><div id="algolia-stats"></div><div id="algolia-hits"></div><div class="algolia-pagination" id="algolia-pagination"></div></div></div></div><script src="https://cdn.jsdelivr.net/npm/live2d-widget@^3.1.3/lib/L2Dwidget.min.js"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.9},"dialog":{"enable":true},"log":false});</script></body></html>
