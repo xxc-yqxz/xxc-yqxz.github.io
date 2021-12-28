@@ -189,7 +189,7 @@ body::before {
   width: 100%;
   height: 100%;
   z-index: -1;
-  background-image: url("https://cdn.jsdelivr.net/gh/xxc-yqxz/xxc-yqxz.github.io/images/light-background3.png");
+  background-image: url("/images/light-background3.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -2189,7 +2189,7 @@ input {
     color: var(--hty-text-color);
   }
   :root:not([data-user-color-scheme]) body::before {
-    background-image: url("https://cdn.jsdelivr.net/gh/xxc-yqxz/xxc-yqxz.github.io/images/dark-background3.png");
+    background-image: url("/images/dark-background3.png");
   }
   :root:not([data-user-color-scheme]) .char {
     background-color: rgba(0,0,0,0.5);
@@ -2256,7 +2256,7 @@ input {
   color: var(--hty-text-color);
 }
 [data-user-color-scheme='dark'] body::before {
-  background-image: url("https://cdn.jsdelivr.net/gh/xxc-yqxz/xxc-yqxz.github.io/images/dark-background3.png");
+  background-image: url("/images/dark-background3.png");
 }
 [data-user-color-scheme='dark'] .char {
   background-color: rgba(0,0,0,0.5);
