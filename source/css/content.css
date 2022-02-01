@@ -1,0 +1,13 @@
+a:hover {
+    color:#1661ab
+}
+.copyright{
+    color: #1661ab;
+}
+.live_time{
+    display: inline-block;
+    padding: 5px 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: black;
+}

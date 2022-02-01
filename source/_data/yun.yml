@@ -1,0 +1,147 @@
+mode: time
+head:
+  css:
+    content: /css/content.css
+sidebar:
+  bg_image: https://cdn.jsdelivr.net/gh/xxc-yqxz/xxc-yqxz.github.io/images/sidebar_bgc2.jpg
+  bg_position: bottom 3rem center
+  tagcloud:
+    enable: true
+    amount: 20
+social:
+  - name: QQ
+    link: https://wpa.qq.com/msgrd?v=3&uin=894043590&site=qq&menu=yes
+    icon: icon-qq-line
+    color: "#12B7F5"
+  - name: 网易云音乐
+    link: https://music.163.com/#/user/home?id=1379764422
+    icon: icon-netease-cloud-music-line
+    color: "#C10D0C"
+  - name: 哔哩哔哩
+    link: https://space.bilibili.com/269921139
+    icon: icon-bilibili-line
+    color: "#FF8EB3"
+colors:
+  primary: "#5698c3"
+  selection_bg: "skyblue"
+  tag_start_color: "#93b5cf"
+  tag_end_color: "#8abcd1"
+avatar:
+  url: https://cdn.jsdelivr.net/gh/xxc-yqxz/xxc-yqxz.github.io/images/avatar.jpg
+  status:
+    enable: false
+banner:
+  enable: true
+  title: 轻语馆
+  src: /js/ui/banner.js
+  border: true
+  cloud:
+    enable: true
+    color: "#93b5cf"
+  go_down:
+    enable: true
+    icon: icon-arrow-down-s-line
+notice:
+  enable: true
+  content: 春招必拿下
+bg_image:
+  enable: true
+  url: https://pic-1308164762.cos.ap-shanghai.myqcloud.com/light_bg.jpg
+  dark: https://pic-1308164762.cos.ap-shanghai.myqcloud.com/night_bg.jpg
+  opacity: 0.8
+fireworks:
+  enable: false
+  colors:
+    - "36, 134, 185"
+    - "99, 187, 208"
+cursor:
+  enable: true
+  default: https://cdn.jsdelivr.net/gh/YunYouJun/cdn/css/md-cursors/pointer.cur
+  pointer: https://cdn.jsdelivr.net/gh/YunYouJun/cdn/css/md-cursors/link.cur
+  text: https://cdn.jsdelivr.net/gh/YunYouJun/cdn/css/md-cursors/text.cur
+hex:
+archive:
+  last_word: 再怎么翻也没有啦
+menu:
+  home:
+    path: /
+    icon: icon-home-4-line
+  list:
+    - type: archives
+      path: /archives/
+      icon: icon-archive-line
+    - type: categories
+      path: /categories/
+      icon: icon-folder-2-line
+    - type: tags
+      path: /tags/
+      icon: icon-price-tag-3-line
+  custom:
+    title: 文档
+    path: https://github.com/xxc-yqxz/xxc-yqxz.github.io
+    icon: icon-github-line
+reward:
+  enable: false
+scrollreveal:
+  enable: false
+footer:
+  since: 2021
+  powered:
+    enable: false
+  beian:
+    enable: true
+    icp: 闽ICP备2021017107号-1
+  live_time:
+    enable: true
+    suffix:
+    prefix: 本博客已运行：
+    start_time: "2021-09-23T00:03:00"
+lazyload:
+  enable: true
+say:
+  enable: true
+  api: /data/sentences.json
+  src: /js/say.js
+  hitokoto:
+    enable: false
+post_card:
+  opacity: 0.5
+algolia_search:
+  enable: true
+  src: /js/search/algolia-search.js
+  hits:
+    per_page: 10
+creative_commons:
+  license: by-nc-sa
+  post: true
+  language: deed.zh
+  clipboard: false
+wordcount:
+  enable: true
+  count: true
+  time: true
+highlight:
+  enable: true
+# 启用 prism
+prismjs:
+  enable: true
+  preprocess: true
+  line_number: false
+  tab_replace: ""
+codeblock:
+  copy_btn: true
+  prismjs:
+    light: default
+    dark: tomorrow
+valine:
+  enable: true
+  appId: MnqOxUn1tp2XfaBiRJqcPNC3-MdYXbMMI
+  appKey: BUJAYYUt5IhdIDVVvHH8aHMx
+  placeholder: 来与我一起讨论吧 # comment box placeholder
+  avatar: # gravatar style
+  meta:
+    - nick
+  pageSize: 10 # pagination size
+pages:
+pjax:
+  enable: true
